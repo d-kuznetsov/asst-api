@@ -81,6 +81,7 @@ class MongoDB {
 
   async disconnect() {
     await this.client.close();
+    console.log("Database connection closed");
   }
 }
 
