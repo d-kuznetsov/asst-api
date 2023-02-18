@@ -12,7 +12,7 @@ class RepositiryClientError extends RepositoryError {
 }
 
 class RepositiryServerError extends RepositoryError {
-  constructor(message) {
+  constructor(message = "Internal database error") {
     super(message);
   }
 }
