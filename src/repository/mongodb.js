@@ -9,10 +9,22 @@ class MongoDB {
     try {
       await this.client.connect();
       await this.client.db("assistants").command({ ping: 1 });
-      console.log("MongoDB: connected successfully to server");
-    } finally {
-      await this.client.close();
+      console.log("Repository: connected successfully to databese server");
+    } catch (err) {
+      throw Error("Repository: connection to database server failed");
     }
+  }
+
+  async createClient(params) {
+    const result = await this.client
+      .db("assistanst")
+      .collection("clients")
+      .insertOne(params);
+    console.log(`A document was inserted with the _id: ${result.insertedId}`);
+  }
+
+  async disconnect() {
+    await this.client.disconnect();
   }
 }
 
