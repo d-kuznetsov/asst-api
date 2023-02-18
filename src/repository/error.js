@@ -1,3 +1,7 @@
+const ERR_MESSAGES = {
+  NO_RECORD_FOUND: "No record found with given id",
+};
+
 class RepositoryError extends Error {
   constructor(message) {
     super(message);
@@ -28,6 +32,7 @@ function run() {
 run(); */
 
 module.exports = {
+  ERR_MESSAGES,
   RepositoryError,
   RepositiryClientError,
   RepositiryServerError,

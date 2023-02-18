@@ -1,5 +1,9 @@
 const { MongoClient, ObjectId } = require("mongodb");
-const { RepositiryClientError, RepositiryServerError } = require("./error");
+const {
+  RepositiryClientError,
+  RepositiryServerError,
+  ERR_MESSAGES,
+} = require("./error");
 
 class MongoDB {
   constructor(uri = "mongodb://localhost:27017/") {
@@ -41,7 +45,7 @@ class MongoDB {
       throw new RepositiryServerError();
     }
     if (!result) {
-      throw RepositiryClientError("No record found with given id");
+      throw new RepositiryClientError(ERR_MESSAGES.NO_RECORD_FOUND);
     }
     return result;
   }
@@ -56,10 +60,10 @@ class MongoDB {
         .updateOne({ _id: new ObjectId(clientId) }, { $set: restParams });
     } catch (err) {
       console.error(err);
-      throw RepositiryServerError();
+      throw new RepositiryServerError();
     }
     if (!result.modifiedCount) {
-      throw RepositiryClientError("No record found with given id");
+      throw new RepositiryClientError(ERR_MESSAGES.NO_RECORD_FOUND);
     }
   }
 
@@ -72,10 +76,10 @@ class MongoDB {
         .deleteOne({ _id: new ObjectId(clientId) });
     } catch (err) {
       console.error(err);
-      throw RepositiryServerError();
+      throw new RepositiryServerError();
     }
     if (!result.deletedCount) {
-      throw RepositiryClientError("No record found with given id");
+      throw new RepositiryClientError(ERR_MESSAGES.NO_RECORD_FOUND);
     }
   }
 

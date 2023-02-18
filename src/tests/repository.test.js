@@ -1,4 +1,4 @@
-const Repositiry = require("../repository").MongoDB;
+const { MongoDB: Repositiry, ERR_MESSAGES } = require("../repository");
 
 describe("client", () => {
   const repository = new Repositiry();
@@ -38,7 +38,7 @@ describe("client", () => {
       await repository.deleteClient(clientId);
       await repository.readClient(clientId);
     } catch (err) {
-      expect(err.message).toMatch("No record found with given id");
+      expect(err.message).toMatch(ERR_MESSAGES.NO_RECORD_FOUND);
     }
   });
 
