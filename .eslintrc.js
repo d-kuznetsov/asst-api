@@ -5,6 +5,7 @@ module.exports = {
     es6: true,
   },
   extends: ["eslint:recommended", "prettier"],
+  ignorePatterns: ["src/tests/*.js"],
   parserOptions: {
     ecmaVersion: 2020,
   },
