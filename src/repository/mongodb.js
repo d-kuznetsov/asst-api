@@ -1,4 +1,5 @@
 const { MongoClient, ObjectId } = require("mongodb");
+const { RepositiryClientError, RepositiryServerError } = require("./error");
 
 class MongoDB {
   constructor(uri = "mongodb://localhost:27017/") {
@@ -9,43 +10,73 @@ class MongoDB {
     try {
       await this.client.connect();
       await this.client.db("assistants").command({ ping: 1 });
-      console.log("Repository: connected successfully to databese server");
     } catch (err) {
-      throw Error("Repository: connection to database server failed");
+      throw new RepositiryServerError("Databese connection failed");
     }
   }
 
   async createClient(params) {
-    const result = await this.client
-      .db("assistanst")
-      .collection("clients")
-      .insertOne(params);
-    console.log(`A document was inserted with the _id: ${result.insertedId}`);
+    let result;
+    try {
+      result = await this.client
+        .db("assistanst")
+        .collection("clients")
+        .insertOne(params);
+    } catch (err) {
+      console.error(err);
+      throw new RepositiryServerError();
+    }
+    return result.insertedId;
   }
 
   async readClient(clientId) {
-    const result = await this.client
-      .db("assistanst")
-      .collection("clients")
-      .findOne({ _id: new ObjectId(clientId) });
-    console.log(result);
+    let result;
+    try {
+      result = await this.client
+        .db("assistanst")
+        .collection("clients")
+        .findOne({ _id: new ObjectId(clientId) });
+    } catch (err) {
+      console.error(err);
+      throw new RepositiryServerError();
+    }
+    if (!result) {
+      throw RepositiryClientError("No record found with given id");
+    }
+    return result;
   }
 
   async updateClient(params) {
-    const { id: clientId, ...restParams } = params;
-    const result = await this.client
-      .db("assistanst")
-      .collection("clients")
-      .updateOne({ _id: new ObjectId(clientId) }, { $set: restParams });
-    console.log(result);
+    let result;
+    try {
+      const { id: clientId, ...restParams } = params;
+      result = await this.client
+        .db("assistanst")
+        .collection("clients")
+        .updateOne({ _id: new ObjectId(clientId) }, { $set: restParams });
+    } catch (err) {
+      console.error(err);
+      throw RepositiryServerError();
+    }
+    if (!result.modifiedCount) {
+      throw RepositiryClientError("No record found with given id");
+    }
   }
 
   async deleteClient(clientId) {
-    const result = await this.client
-      .db("assistanst")
-      .collection("clients")
-      .deleteOne({ _id: new ObjectId(clientId) });
-    console.log(result);
+    let result;
+    try {
+      result = await this.client
+        .db("assistanst")
+        .collection("clients")
+        .deleteOne({ _id: new ObjectId(clientId) });
+    } catch (err) {
+      console.error(err);
+      throw RepositiryServerError();
+    }
+    if (!result.deletedCount) {
+      throw RepositiryClientError("No record found with given id");
+    }
   }
 
   async disconnect() {
