@@ -1,4 +1,4 @@
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 
 class MongoDB {
   constructor(uri = "mongodb://localhost:27017/") {
@@ -23,8 +23,33 @@ class MongoDB {
     console.log(`A document was inserted with the _id: ${result.insertedId}`);
   }
 
+  async readClient(clientId) {
+    const result = await this.client
+      .db("assistanst")
+      .collection("clients")
+      .findOne({ _id: new ObjectId(clientId) });
+    console.log(result);
+  }
+
+  async updateClient(params) {
+    const { id: clientId, ...restParams } = params;
+    const result = await this.client
+      .db("assistanst")
+      .collection("clients")
+      .updateOne({ _id: new ObjectId(clientId) }, { $set: restParams });
+    console.log(result);
+  }
+
+  async deleteClient(clientId) {
+    const result = await this.client
+      .db("assistanst")
+      .collection("clients")
+      .deleteOne({ _id: new ObjectId(clientId) });
+    console.log(result);
+  }
+
   async disconnect() {
-    await this.client.disconnect();
+    await this.client.close();
   }
 }
 
