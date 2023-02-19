@@ -1,9 +1,5 @@
 const { MongoClient, ObjectId } = require("mongodb");
-const {
-  RepositiryClientError,
-  RepositiryServerError,
-  ERR_MESSAGES,
-} = require("./error");
+const { ServerError, ClientError, ERR_MESSAGES } = require("../error");
 
 class MongoDB {
   constructor(uri = "mongodb://localhost:27017/") {
@@ -15,7 +11,8 @@ class MongoDB {
       await this.client.connect();
       await this.client.db("assistants").command({ ping: 1 });
     } catch (err) {
-      throw new RepositiryServerError("Databese connection failed");
+      console.error(err);
+      throw new ServerError(ERR_MESSAGES.CONNECTION_FAILED);
     }
   }
 
@@ -28,7 +25,7 @@ class MongoDB {
         .insertOne(params);
     } catch (err) {
       console.error(err);
-      throw new RepositiryServerError();
+      throw new ServerError();
     }
     return result.insertedId;
   }
@@ -42,10 +39,10 @@ class MongoDB {
         .findOne({ _id: new ObjectId(clientId) });
     } catch (err) {
       console.error(err);
-      throw new RepositiryServerError();
+      throw new ServerError();
     }
     if (!result) {
-      throw new RepositiryClientError(ERR_MESSAGES.NO_RECORD_FOUND);
+      throw new ClientError(ERR_MESSAGES.NO_RECORD_FOUND);
     }
     return result;
   }
@@ -60,10 +57,10 @@ class MongoDB {
         .updateOne({ _id: new ObjectId(clientId) }, { $set: restParams });
     } catch (err) {
       console.error(err);
-      throw new RepositiryServerError();
+      throw new ServerError();
     }
     if (!result.modifiedCount) {
-      throw new RepositiryClientError(ERR_MESSAGES.NO_RECORD_FOUND);
+      throw new ClientError(ERR_MESSAGES.NO_RECORD_FOUND);
     }
   }
 
@@ -76,10 +73,10 @@ class MongoDB {
         .deleteOne({ _id: new ObjectId(clientId) });
     } catch (err) {
       console.error(err);
-      throw new RepositiryServerError();
+      throw new ServerError();
     }
     if (!result.deletedCount) {
-      throw new RepositiryClientError(ERR_MESSAGES.NO_RECORD_FOUND);
+      throw new ClientError(ERR_MESSAGES.NO_RECORD_FOUND);
     }
   }
 

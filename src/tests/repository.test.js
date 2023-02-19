@@ -1,4 +1,5 @@
-const { MongoDB: Repositiry, ERR_MESSAGES } = require("../repository");
+const Repositiry = require("../repository").MongoDB;
+const { ERR_MESSAGES } = require("../error");
 
 describe("client", () => {
   const repository = new Repositiry();
