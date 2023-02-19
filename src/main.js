@@ -15,9 +15,12 @@ fastify.register(defineRouterRegister(controller));
 
 const start = async () => {
   try {
+    await repository.connect();
     await fastify.listen({ port: 3000 });
+    console.log("Server is listenning on port 3000");
   } catch (err) {
     fastify.log.error(err);
+    await repository.disconnect();
     process.exit(1);
   }
 };
