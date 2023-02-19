@@ -8,7 +8,7 @@ class Service {
   }
 
   async readClient(id) {
-    await this.repository.readClient(id);
+    return await this.repository.readClient(id);
   }
 
   async updateClient(params) {
