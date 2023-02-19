@@ -44,7 +44,11 @@ class MongoDB {
     if (!result) {
       throw new ClientError(ERR_MESSAGES.NO_RECORD_FOUND);
     }
-    return result;
+    const { _id, ...restProps } = result;
+    return {
+      id: _id.toString(),
+      ...restProps,
+    };
   }
 
   async updateClient(params) {
