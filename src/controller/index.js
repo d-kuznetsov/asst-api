@@ -3,7 +3,13 @@ class Controller {
     this.service = service;
   }
   async readClient(req, reply) {
-    reply.send("plain string");
+    try {
+      const client = await this.service.readClient(req.params.id);
+      reply.send(client);
+    } catch (err) {
+      console.error(err);
+      reply.code(500).send(err);
+    }
   }
 }
 
