@@ -27,7 +27,7 @@ class MongoDB {
       console.error(err);
       throw new ServerError();
     }
-    return result.insertedId;
+    return result.insertedId.toString();
   }
 
   async readClient(clientId) {
