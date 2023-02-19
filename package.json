@@ -5,7 +5,8 @@
   "main": "main.js",
   "scripts": {
     "test": "jest",
-    "test:repository": "jest src/tests/repository"
+    "test:repository": "jest src/tests/repository",
+    "dev": "npx nodemon --inspect src/main.js "
   },
   "author": "Dmitry Kuznetsov",
   "license": "ISC",
