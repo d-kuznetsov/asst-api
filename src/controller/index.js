@@ -6,6 +6,17 @@ class Controller {
   constructor(service) {
     this.service = service;
   }
+
+  async createClient(req, reply) {
+    try {
+      const id = await this.service.createClient(req.body);
+      reply.send(id);
+    } catch (err) {
+      console.error(err);
+      reply.code(500).send(STATUS_CODES[500]);
+    }
+  }
+
   async readClient(req, reply) {
     try {
       const client = await this.service.readClient(req.params.id);

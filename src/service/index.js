@@ -4,7 +4,7 @@ class Service {
   }
 
   async createClient(params) {
-    await this.repository.createClient(params);
+    return await this.repository.createClient(params);
   }
 
   async readClient(id) {

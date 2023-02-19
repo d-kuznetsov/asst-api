@@ -1,8 +1,30 @@
 const routeOptions = {
+  createClient: {
+    method: "POST",
+    url: "/client",
+    schema: {
+      body: {
+        type: "object",
+        properties: {
+          name: { type: "string" },
+          email: { type: "string" },
+        },
+        required: ["name", "email"],
+      },
+      response: {
+        200: {
+          type: "string",
+        },
+      },
+    },
+  },
   readClient: {
     method: "GET",
     url: "/client/:id",
     schema: {
+      params: {
+        id: { type: "string" },
+      },
       response: {
         200: {
           type: "object",
