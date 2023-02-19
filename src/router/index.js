@@ -7,7 +7,8 @@ const routeOptions = {
         200: {
           type: "object",
           properties: {
-            hello: { type: "string" },
+            name: { type: "string" },
+            email: { type: "string" },
           },
         },
       },
