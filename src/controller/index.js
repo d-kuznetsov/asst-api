@@ -13,18 +13,18 @@ const createErrObj = (statusCode, message) => {
   return errObj;
 };
 
-const checkAuth = async (req, service) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  if (token) {
-    return await service.checkAuth(token);
-  } else {
-    throw new ClientError("Authentication failed");
-  }
-};
-
 class Controller {
   constructor(service) {
     this.service = service;
+  }
+
+  async _checkAuth(req) {
+    const token = req.headers.authorization?.split(" ")[1];
+    if (token) {
+      return await this.service.checkAuth(token);
+    } else {
+      throw new ClientError("Authentication failed");
+    }
   }
 
   async createClient(req, reply) {
@@ -39,7 +39,7 @@ class Controller {
 
   async readClient(req, reply) {
     try {
-      await checkAuth(req, this.service);
+      await this._checkAuth(req);
       const client = await this.service.readClient(req.params.id);
       reply.send(client);
     } catch (err) {
