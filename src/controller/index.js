@@ -2,6 +2,17 @@ const { STATUS_CODES } = require("http");
 
 const { ClientError } = require("../error");
 
+const createErrObj = (statusCode, message) => {
+  const errObj = {
+    statusCode,
+    error: STATUS_CODES[400],
+  };
+  if (statusCode !== 500) {
+    errObj.message = message;
+  }
+  return errObj;
+};
+
 class Controller {
   constructor(service) {
     this.service = service;
@@ -13,7 +24,7 @@ class Controller {
       reply.send({ id });
     } catch (err) {
       console.error(err);
-      reply.code(500).send(STATUS_CODES[500]);
+      reply.code(500).send(createErrObj(500));
     }
   }
 
@@ -23,11 +34,11 @@ class Controller {
       reply.send(client);
     } catch (err) {
       if (err instanceof ClientError) {
-        reply.code(400).send(STATUS_CODES[400]);
+        reply.code(400).send(createErrObj(400, err.message));
         return;
       }
       console.error(err);
-      reply.code(500).send(STATUS_CODES[500]);
+      reply.code(500).send(createErrObj(500));
     }
   }
 
@@ -37,11 +48,11 @@ class Controller {
       reply.send({ status: "Ok" });
     } catch (err) {
       if (err instanceof ClientError) {
-        reply.code(400).send(STATUS_CODES[400]);
+        reply.code(400).send(createErrObj(400, err.message));
         return;
       }
       console.error(err);
-      reply.code(500).send(STATUS_CODES[500]);
+      reply.code(500).send(createErrObj(500));
     }
   }
 
@@ -51,11 +62,11 @@ class Controller {
       reply.send({ status: "Ok" });
     } catch (err) {
       if (err instanceof ClientError) {
-        reply.code(400).send(STATUS_CODES[400]);
+        reply.code(400).send(createErrObj(400, err.message));
         return;
       }
       console.error(err);
-      reply.code(500).send(STATUS_CODES[500]);
+      reply.code(500).send(createErrObj(500));
     }
   }
 }
