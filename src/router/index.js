@@ -60,6 +60,23 @@ const routeOptions = {
       },
     },
   },
+  deleteClient: {
+    method: "DELETE",
+    url: "/client/:id",
+    schema: {
+      params: {
+        id: { type: "string" },
+      },
+      response: {
+        200: {
+          type: "object",
+          properties: {
+            status: { type: "string" },
+          },
+        },
+      },
+    },
+  },
 };
 
 const defineRouterRegister = (controller) => {
