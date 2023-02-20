@@ -15,7 +15,7 @@ const routeOptions = {
         200: {
           type: "object",
           properties: {
-            status: { type: "string" },
+            id: { type: "string" },
           },
         },
       },
