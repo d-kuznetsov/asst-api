@@ -13,6 +13,15 @@ const createErrObj = (statusCode, message) => {
   return errObj;
 };
 
+const checkAuth = async (req, service) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (token) {
+    return await service.checkAuth(token);
+  } else {
+    throw new ClientError("Authentication failed");
+  }
+};
+
 class Controller {
   constructor(service) {
     this.service = service;
@@ -30,6 +39,7 @@ class Controller {
 
   async readClient(req, reply) {
     try {
+      await checkAuth(req, this.service);
       const client = await this.service.readClient(req.params.id);
       reply.send(client);
     } catch (err) {

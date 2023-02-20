@@ -60,6 +60,14 @@ class Service {
     const token = await this.jwt.sign(user);
     return token;
   }
+
+  async checkAuth(token) {
+    try {
+      return await this.jwt.verify(token);
+    } catch (err) {
+      throw new ClientError("Authentication failed");
+    }
+  }
 }
 
 module.exports = {
