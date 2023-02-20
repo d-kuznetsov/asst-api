@@ -1,6 +1,13 @@
 const { MongoClient, ObjectId } = require("mongodb");
 const { ServerError, ClientError, ERR_MESSAGES } = require("../error");
 
+const checkId = (id) => {
+  if (!ObjectId.isValid(id)) {
+    throw new ClientError(ERR_MESSAGES.INVALID_ID);
+  }
+  return true;
+};
+
 class MongoDB {
   constructor(uri = "mongodb://localhost:27017/") {
     this.client = new MongoClient(uri);
@@ -31,6 +38,8 @@ class MongoDB {
   }
 
   async readClient(clientId) {
+    checkId(clientId);
+
     let result;
     try {
       result = await this.client
@@ -52,6 +61,8 @@ class MongoDB {
   }
 
   async updateClient(params) {
+    checkId(params.id);
+
     let result;
     try {
       const { id: clientId, ...restParams } = params;
@@ -69,6 +80,8 @@ class MongoDB {
   }
 
   async deleteClient(clientId) {
+    checkId(clientId);
+
     let result;
     try {
       result = await this.client

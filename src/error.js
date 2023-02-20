@@ -7,6 +7,7 @@ const ERR_MESSAGES = {
   CONNECTION_FAILED: "Database connection failed",
   INTERNAL_DB_ERR: "Internal database error",
   NO_RECORD_FOUND: "No record found",
+  INVALID_ID: "Invalid id",
 };
 
 class CustomError extends Error {
