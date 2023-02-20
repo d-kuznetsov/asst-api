@@ -36,6 +36,25 @@ class Service {
     }
     throw new ClientError("A user with this email already exists");
   }
+
+  async login(params) {
+    const { email, password } = params;
+    const authErr = new ClientError("Email or/and password are not correct");
+    let user;
+
+    try {
+      user = await this.repository.findUser({ email });
+    } catch (err) {
+      if (err instanceof ClientError) {
+        throw authErr;
+      }
+      throw err;
+    }
+    if (user.password !== password) {
+      throw authErr;
+    }
+    return user;
+  }
 }
 
 module.exports = {

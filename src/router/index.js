@@ -113,6 +113,33 @@ const routeOptions = {
       },
     },
   },
+
+  login: {
+    method: "POST",
+    url: "/login",
+    schema: {
+      body: {
+        type: "object",
+        properties: {
+          email: { type: "string" },
+          password: { type: "string" },
+        },
+        required: ["email", "password"],
+        additionalProperties: false,
+      },
+      response: {
+        200: {
+          type: "object",
+          properties: {
+            id: { type: "string" },
+            name: { type: "string" },
+            email: { type: "string" },
+            password: { type: "string" },
+          },
+        },
+      },
+    },
+  },
 };
 
 const defineRouterRegister = (controller) => {
