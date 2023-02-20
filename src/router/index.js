@@ -10,6 +10,7 @@ const routeOptions = {
           email: { type: "string" },
         },
         required: ["name", "email"],
+        additionalProperties: false,
       },
       response: {
         200: {
@@ -54,6 +55,7 @@ const routeOptions = {
           email: { type: "string" },
         },
         required: ["id"],
+        additionalProperties: false,
       },
       response: {
         200: {
