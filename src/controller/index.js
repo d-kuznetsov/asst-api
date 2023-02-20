@@ -10,7 +10,7 @@ class Controller {
   async createClient(req, reply) {
     try {
       const id = await this.service.createClient(req.body);
-      reply.send(id);
+      reply.send({ id });
     } catch (err) {
       console.error(err);
       reply.code(500).send(STATUS_CODES[500]);

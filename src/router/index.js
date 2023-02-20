@@ -13,11 +13,15 @@ const routeOptions = {
       },
       response: {
         200: {
-          type: "string",
+          type: "object",
+          properties: {
+            status: { type: "string" },
+          },
         },
       },
     },
   },
+
   readClient: {
     method: "GET",
     url: "/client/:id",
@@ -37,6 +41,7 @@ const routeOptions = {
       },
     },
   },
+
   updateClient: {
     method: "PATCH",
     url: "/client",
@@ -60,6 +65,7 @@ const routeOptions = {
       },
     },
   },
+
   deleteClient: {
     method: "DELETE",
     url: "/client/:id",
