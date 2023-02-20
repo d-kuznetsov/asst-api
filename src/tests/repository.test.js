@@ -14,13 +14,13 @@ describe("client", () => {
   });
 
   test("create client", async () => {
-    clientId = await repository.createClient(mockClient);
+    clientId = await repository.createClient({ ...mockClient });
     expect(clientId).toBeTruthy();
   });
 
   test("read client", async () => {
     const createdClient = await repository.readClient(clientId);
-    expect(createdClient).toEqual(mockClient);
+    expect(createdClient).toEqual({ id: clientId, ...mockClient });
   });
 
   test("update client", async () => {
