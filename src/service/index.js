@@ -1,8 +1,9 @@
 const { ClientError } = require("../error");
 
 class Service {
-  constructor(repository) {
+  constructor(repository, jwt) {
     this.repository = repository;
+    this.jwt = jwt;
   }
 
   async createClient(params) {
@@ -29,10 +30,13 @@ class Service {
         throw err;
       }
       const id = await this.repository.createUser(params);
-      return {
+      // eslint-disable-next-line
+      const { _id, ...restUserProps } = params;
+      const token = await this.jwt.sign({
         id,
-        ...params,
-      };
+        ...restUserProps,
+      });
+      return token;
     }
     throw new ClientError("A user with this email already exists");
   }
@@ -53,7 +57,8 @@ class Service {
     if (user.password !== password) {
       throw authErr;
     }
-    return user;
+    const token = await this.jwt.sign(user);
+    return token;
   }
 }
 

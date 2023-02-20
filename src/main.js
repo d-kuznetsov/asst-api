@@ -1,14 +1,17 @@
+require("dotenv").config();
 const fastify = require("fastify")({
   logger: false,
 });
 
 const Repository = require("./repository").MongoDB;
 const { Service } = require("./service");
+const { JWT } = require("./service/jwt");
 const { Controller } = require("./controller");
 const { defineRouterRegister } = require("./router");
 
 const repository = new Repository();
-const service = new Service(repository);
+const jwt = new JWT(process.env.JWT_SECRET_KEY);
+const service = new Service(repository, jwt);
 const controller = new Controller(service);
 
 fastify.register(defineRouterRegister(controller));

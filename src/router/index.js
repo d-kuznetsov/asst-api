@@ -104,10 +104,7 @@ const routeOptions = {
         200: {
           type: "object",
           properties: {
-            id: { type: "string" },
-            name: { type: "string" },
-            email: { type: "string" },
-            password: { type: "string" },
+            token: { type: "string" },
           },
         },
       },
@@ -131,10 +128,7 @@ const routeOptions = {
         200: {
           type: "object",
           properties: {
-            id: { type: "string" },
-            name: { type: "string" },
-            email: { type: "string" },
-            password: { type: "string" },
+            token: { type: "string" },
           },
         },
       },

@@ -72,8 +72,8 @@ class Controller {
 
   async registerUser(req, reply) {
     try {
-      const user = await this.service.registerUser(req.body);
-      reply.send(user);
+      const token = await this.service.registerUser(req.body);
+      reply.send({ token });
     } catch (err) {
       if (err instanceof ClientError) {
         reply.code(400).send(createErrObj(400, err.message));
@@ -86,8 +86,8 @@ class Controller {
 
   async login(req, reply) {
     try {
-      const user = await this.service.login(req.body);
-      reply.send(user);
+      const token = await this.service.login(req.body);
+      reply.send({ token });
     } catch (err) {
       if (err instanceof ClientError) {
         reply.code(400).send(createErrObj(400, err.message));
