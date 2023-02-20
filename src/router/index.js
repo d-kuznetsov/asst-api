@@ -37,6 +37,29 @@ const routeOptions = {
       },
     },
   },
+  updateClient: {
+    method: "PATCH",
+    url: "/client",
+    schema: {
+      body: {
+        type: "object",
+        properties: {
+          id: { type: "string" },
+          name: { type: "string" },
+          email: { type: "string" },
+        },
+        required: ["id"],
+      },
+      response: {
+        200: {
+          type: "object",
+          properties: {
+            status: { type: "string" },
+          },
+        },
+      },
+    },
+  },
 };
 
 const defineRouterRegister = (controller) => {
