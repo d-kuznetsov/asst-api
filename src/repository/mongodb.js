@@ -97,6 +97,43 @@ class MongoDB {
     }
   }
 
+  async createUser(params) {
+    let result;
+    try {
+      result = await this.client
+        .db("assistanst")
+        .collection("users")
+        .insertOne(params);
+    } catch (err) {
+      console.error(err);
+      throw new ServerError();
+    }
+    return result.insertedId.toString();
+  }
+
+  async readUser(id) {
+    checkId(id);
+
+    let result;
+    try {
+      result = await this.client
+        .db("assistanst")
+        .collection("users")
+        .findOne({ _id: new ObjectId(id) });
+    } catch (err) {
+      console.error(err);
+      throw new ServerError();
+    }
+    if (!result) {
+      throw new ClientError(ERR_MESSAGES.NO_RECORD_FOUND);
+    }
+    const { _id, ...restProps } = result;
+    return {
+      id: _id.toString(),
+      ...restProps,
+    };
+  }
+
   async disconnect() {
     await this.client.close();
     console.log("Database connection closed");
