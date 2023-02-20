@@ -111,15 +111,13 @@ class MongoDB {
     return result.insertedId.toString();
   }
 
-  async readUser(id) {
-    checkId(id);
-
+  async findUser(params) {
     let result;
     try {
       result = await this.client
         .db("assistanst")
         .collection("users")
-        .findOne({ _id: new ObjectId(id) });
+        .findOne(params);
     } catch (err) {
       console.error(err);
       throw new ServerError();
