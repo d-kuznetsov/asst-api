@@ -132,6 +132,20 @@ class MongoDB {
     };
   }
 
+  async createAssistant(params) {
+    let result;
+    try {
+      result = await this.client
+        .db("assistanst")
+        .collection("assistants")
+        .insertOne(params);
+    } catch (err) {
+      console.error(err);
+      throw new ServerError();
+    }
+    return result.insertedId.toString();
+  }
+
   async disconnect() {
     await this.client.close();
     console.log("Database connection closed");

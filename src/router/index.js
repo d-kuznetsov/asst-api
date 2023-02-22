@@ -134,6 +134,22 @@ const routeOptions = {
       },
     },
   },
+
+  createAssistant: {
+    method: "POST",
+    url: "/upload",
+    schema: {
+      body: {
+        type: "object",
+        required: ["config"],
+        properties: {
+          config: {
+            type: "string",
+          },
+        },
+      },
+    },
+  },
 };
 
 const defineRouterRegister = (controller) => {

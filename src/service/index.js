@@ -68,6 +68,10 @@ class Service {
       throw new ClientError("Authentication failed");
     }
   }
+
+  async createAssistant(params) {
+    return await this.repository.createAssistant(params);
+  }
 }
 
 module.exports = {

@@ -107,6 +107,16 @@ class Controller {
       reply.code(500).send(createErrObj(500));
     }
   }
+
+  async createAssistant(req, reply) {
+    try {
+      const id = await this.service.createAssistant(req.body);
+      reply.send({ id });
+    } catch (err) {
+      console.error(err);
+      reply.code(500).send(createErrObj(500));
+    }
+  }
 }
 
 module.exports = {

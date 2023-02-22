@@ -2,6 +2,9 @@ require("dotenv").config();
 const fastify = require("fastify")({
   logger: false,
 });
+fastify.register(require("@fastify/multipart"), {
+  attachFieldsToBody: "keyValues",
+});
 
 const Repository = require("./repository").MongoDB;
 const { Service } = require("./service");
