@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@fastify/multipart": "^7.4.1",
+    "@fastify/static": "^6.9.0",
     "dotenv": "^16.0.3",
     "fastify": "^4.13.0",
     "jsonwebtoken": "^9.0.0",
