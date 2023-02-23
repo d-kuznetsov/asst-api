@@ -6,6 +6,22 @@ fastify.register(require("@fastify/multipart"), {
   attachFieldsToBody: "keyValues",
 });
 
+const path = require("path");
+
+fastify.register(require("@fastify/static"), {
+  root: path.join(process.cwd(), "/build"),
+  prefix: "/", // optional: default '/'
+});
+
+fastify.addHook("preHandler", async (request, reply) => {
+  if (request.url.includes("assistant-config")) {
+    const str = 'const c={name:"New Test 2"};export{c};';
+    reply.header("Content-Type", "application/javascript; charset=UTF-8");
+    reply.send(str);
+    return reply;
+  }
+});
+
 const Repository = require("./repository").MongoDB;
 const { Service } = require("./service");
 const { JWT } = require("./service/jwt");
