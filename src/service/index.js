@@ -1,4 +1,5 @@
 const { ClientError } = require("../error");
+const { extractAsstConfig } = require("../lib/assistant-config-wrap");
 
 class Service {
   constructor(repository, jwt) {
@@ -70,7 +71,10 @@ class Service {
   }
 
   async createAssistant(params) {
-    return await this.repository.createAssistant(params);
+    return await this.repository.createAssistant({
+      ...params,
+      config: extractAsstConfig(params.config),
+    });
   }
 }
 

@@ -19,6 +19,11 @@ const getAsstConfigStrWrap = () => {
   };
 };
 
+const extractAsstConfig = (str) => {
+  return str.slice(str.indexOf("{"), str.lastIndexOf("}") + 1);
+};
+
 module.exports = {
   getAsstConfigStrWrap,
+  extractAsstConfig,
 };
