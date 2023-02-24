@@ -1,4 +1,4 @@
-const routeOptions = {
+const protectedRouteOptions = {
   createClient: {
     method: "POST",
     url: "/client",
@@ -86,6 +86,24 @@ const routeOptions = {
     },
   },
 
+  createAssistant: {
+    method: "POST",
+    url: "/upload",
+    schema: {
+      body: {
+        type: "object",
+        required: ["config"],
+        properties: {
+          config: {
+            type: "string",
+          },
+        },
+      },
+    },
+  },
+};
+
+const loginRegisterRouteOptions = {
   registerUser: {
     method: "POST",
     url: "/register",
@@ -134,33 +152,25 @@ const routeOptions = {
       },
     },
   },
-
-  createAssistant: {
-    method: "POST",
-    url: "/upload",
-    schema: {
-      body: {
-        type: "object",
-        required: ["config"],
-        properties: {
-          config: {
-            type: "string",
-          },
-        },
-      },
-    },
-  },
 };
 
 const defineRouterRegister = (controller) => {
   return (fastify, _, done) => {
-    Object.keys(routeOptions).forEach((key) => {
+    Object.keys(protectedRouteOptions).forEach((key) => {
       fastify.route({
-        ...routeOptions[key],
+        ...protectedRouteOptions[key],
         onRequest: [fastify.authenticate],
         handler: controller[key].bind(controller),
       });
     });
+
+    Object.keys(loginRegisterRouteOptions).forEach((key) => {
+      fastify.route({
+        ...loginRegisterRouteOptions[key],
+        handler: controller[key].bind(controller),
+      });
+    });
+
     done();
   };
 };

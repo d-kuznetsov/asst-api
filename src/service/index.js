@@ -33,11 +33,10 @@ class Service {
       const id = await this.repository.createUser(params);
       // eslint-disable-next-line
       const { _id, ...restUserProps } = params;
-      const token = await this.jwt.sign({
+      return {
         id,
         ...restUserProps,
-      });
-      return token;
+      };
     }
     throw new ClientError("A user with this email already exists");
   }
@@ -58,8 +57,7 @@ class Service {
     if (user.password !== password) {
       throw authErr;
     }
-    const token = await this.jwt.sign(user);
-    return token;
+    return user;
   }
 
   async checkAuth(token) {

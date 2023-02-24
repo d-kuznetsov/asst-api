@@ -39,7 +39,6 @@ class Controller {
 
   async readClient(req, reply) {
     try {
-      await this._checkAuth(req);
       const client = await this.service.readClient(req.params.id);
       reply.send(client);
     } catch (err) {
@@ -82,7 +81,8 @@ class Controller {
 
   async registerUser(req, reply) {
     try {
-      const token = await this.service.registerUser(req.body);
+      const user = await this.service.registerUser(req.body);
+      const token = await reply.jwtSign(user);
       reply.send({ token });
     } catch (err) {
       if (err instanceof ClientError) {
@@ -96,7 +96,8 @@ class Controller {
 
   async login(req, reply) {
     try {
-      const token = await this.service.login(req.body);
+      const user = await this.service.login(req.body);
+      const token = await reply.jwtSign(user);
       reply.send({ token });
     } catch (err) {
       if (err instanceof ClientError) {
