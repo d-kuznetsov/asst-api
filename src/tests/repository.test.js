@@ -9,6 +9,13 @@ describe("client", () => {
   };
   let clientId;
 
+  const mockUser = {
+    name: "John Smith",
+    email: "smith@gmail.com",
+    password: "12345678",
+  };
+  let userId;
+
   beforeAll(async () => {
     await repository.connect();
   });
@@ -41,6 +48,16 @@ describe("client", () => {
     } catch (err) {
       expect(err.message).toMatch(ERR_MESSAGES.NO_RECORD_FOUND);
     }
+  });
+
+  test("create user", async () => {
+    userId = await repository.createUser({ ...mockUser });
+    expect(userId).toBeTruthy();
+  });
+
+  test("find user", async () => {
+    const createdUser = await repository.findUser({ email: mockUser.email });
+    expect(createdUser).toEqual({ id: userId, ...mockUser });
   });
 
   afterAll(async () => {
