@@ -18,15 +18,6 @@ class Controller {
     this.service = service;
   }
 
-  async _checkAuth(req) {
-    const token = req.headers.authorization?.split(" ")[1];
-    if (token) {
-      return await this.service.checkAuth(token);
-    } else {
-      throw new ClientError("Authentication failed");
-    }
-  }
-
   async createClient(req, reply) {
     try {
       const id = await this.service.createClient(req.body);

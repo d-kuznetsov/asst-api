@@ -2,9 +2,8 @@ const { ClientError } = require("../error");
 const { extractAsstConfig } = require("../lib/assistant-config-wrap");
 
 class Service {
-  constructor(repository, jwt) {
+  constructor(repository) {
     this.repository = repository;
-    this.jwt = jwt;
   }
 
   async createClient(params) {
@@ -58,14 +57,6 @@ class Service {
       throw authErr;
     }
     return user;
-  }
-
-  async checkAuth(token) {
-    try {
-      return await this.jwt.verify(token);
-    } catch (err) {
-      throw new ClientError("Authentication failed");
-    }
   }
 
   async createAssistant(params) {
