@@ -157,6 +157,7 @@ const defineRouterRegister = (controller) => {
     Object.keys(routeOptions).forEach((key) => {
       fastify.route({
         ...routeOptions[key],
+        onRequest: [fastify.authenticate],
         handler: controller[key].bind(controller),
       });
     });
