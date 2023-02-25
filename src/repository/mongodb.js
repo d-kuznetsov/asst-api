@@ -146,6 +146,27 @@ class MongoDB {
     return result.insertedId.toString();
   }
 
+  async findAssistant(params) {
+    let result;
+    try {
+      result = await this.client
+        .db("assistanst")
+        .collection("assistants")
+        .findOne(params);
+    } catch (err) {
+      console.error(err);
+      throw new ServerError();
+    }
+    if (!result) {
+      throw new ClientError(ERR_MESSAGES.NO_RECORD_FOUND);
+    }
+    const { _id, ...restProps } = result;
+    return {
+      id: _id.toString(),
+      ...restProps,
+    };
+  }
+
   async disconnect() {
     await this.client.close();
     console.log("Database connection closed");

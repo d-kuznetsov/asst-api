@@ -65,6 +65,11 @@ class Service {
       config: extractAsstConfig(params.config),
     });
   }
+
+  async findAsstConfigByOrigin(origin) {
+    const { config } = await this.repository.findAssistant({ origin });
+    return `const c=${config};export{c};`;
+  }
 }
 
 module.exports = {

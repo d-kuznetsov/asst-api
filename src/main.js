@@ -10,22 +10,10 @@ fastify.register(require("@fastify/multipart"), {
 });
 
 const path = require("path");
-const { getAsstConfigStrWrap } = require("./lib/assistant-config-wrap");
 
 fastify.register(require("@fastify/static"), {
   root: path.join(process.cwd(), "/build"),
   prefix: "/", // optional: default '/'
-});
-
-console.log(getAsstConfigStrWrap());
-
-fastify.addHook("preHandler", async (request, reply) => {
-  if (request.url.includes("assistant-config")) {
-    const str = 'const c={name:"New Test 2"};export{c};';
-    reply.header("Content-Type", "application/javascript; charset=UTF-8");
-    reply.send(str);
-    return reply;
-  }
 });
 
 const Repository = require("./repository").MongoDB;
@@ -36,6 +24,11 @@ const { defineRouterRegister } = require("./router");
 const repository = new Repository();
 const service = new Service(repository);
 const controller = new Controller(service);
+
+fastify.addHook(
+  "preHandler",
+  controller.replaceAssistantConfig.bind(controller)
+);
 
 fastify.register(defineRouterRegister(controller));
 
