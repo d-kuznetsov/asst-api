@@ -10,8 +10,8 @@ class Service {
     return await this.repository.createClient(params);
   }
 
-  async readClient(id) {
-    return await this.repository.readClient(id);
+  async findClientById(id) {
+    return await this.repository.findClientById(id);
   }
 
   async updateClient(params) {

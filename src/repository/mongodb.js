@@ -139,7 +139,7 @@ class MongoDB {
     return this._insertOne("clients", params);
   }
 
-  async readClient(id) {
+  async findClientById(id) {
     checkId(id);
     return this._findOne("clients", { id });
   }

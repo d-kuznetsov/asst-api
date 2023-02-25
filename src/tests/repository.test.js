@@ -26,7 +26,7 @@ describe("client", () => {
   });
 
   test("read client", async () => {
-    const createdClient = await repository.readClient(clientId);
+    const createdClient = await repository.findClientById(clientId);
     expect(createdClient).toEqual({ id: clientId, ...mockClient });
   });
 
@@ -36,7 +36,7 @@ describe("client", () => {
       id: clientId,
       email: newEmail,
     });
-    const client = await repository.readClient(clientId);
+    const client = await repository.findClientById(clientId);
     expect(client.email).toEqual(newEmail);
   });
 
@@ -44,7 +44,7 @@ describe("client", () => {
     expect.assertions(1);
     try {
       await repository.deleteClient(clientId);
-      await repository.readClient(clientId);
+      await repository.findClientById(clientId);
     } catch (err) {
       expect(err.message).toMatch(ERR_MESSAGES.NO_RECORD_FOUND);
     }

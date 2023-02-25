@@ -23,7 +23,7 @@ const protectedRouteOptions = {
     },
   },
 
-  readClient: {
+  findClientById: {
     method: "GET",
     url: "/client/:id",
     schema: {

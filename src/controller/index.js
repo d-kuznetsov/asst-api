@@ -28,9 +28,9 @@ class Controller {
     }
   }
 
-  async readClient(req, reply) {
+  async findClientById(req, reply) {
     try {
-      const client = await this.service.readClient(req.params.id);
+      const client = await this.service.findClientById(req.params.id);
       reply.send(client);
     } catch (err) {
       if (err instanceof ClientError) {
