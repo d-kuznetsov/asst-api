@@ -29,7 +29,7 @@ class MongoDbBase {
     this.client = new MongoClient(uri);
   }
 
-  async _insertOne(collection, document) {
+  async _createOne(collection, document) {
     let result;
     try {
       result = await this.client
@@ -104,7 +104,7 @@ class MongoDbBase {
     }
   }
 
-  async _find(collection, query) {
+  async _findMany(collection, query) {
     let result;
     try {
       result = await this.client

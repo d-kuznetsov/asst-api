@@ -6,7 +6,7 @@ class MongoDB extends MongoDbBase {
   }
 
   async createUser(params) {
-    return this._insertOne("users", params);
+    return this._createOne("users", params);
   }
 
   async findUser(params) {
@@ -14,7 +14,7 @@ class MongoDB extends MongoDbBase {
   }
 
   async createClient(params) {
-    return this._insertOne("clients", params);
+    return this._createOne("clients", params);
   }
 
   async findClientById(id) {
@@ -33,11 +33,11 @@ class MongoDB extends MongoDbBase {
   }
 
   async findClients(params = {}) {
-    return this._find("clients", params);
+    return this._findMany("clients", params);
   }
 
   async createAssistant(params) {
-    return this._insertOne("assistants", params);
+    return this._createOne("assistants", params);
   }
 
   async findAssistant(query) {
@@ -45,7 +45,7 @@ class MongoDB extends MongoDbBase {
   }
 
   async findAssistants(params = {}) {
-    return this._find("assistants", params);
+    return this._findMany("assistants", params);
   }
 }
 
