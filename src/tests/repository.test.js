@@ -43,7 +43,7 @@ describe("client", () => {
   test("delete client", async () => {
     expect.assertions(1);
     try {
-      await repository.deleteClient(clientId);
+      await repository.deleteClientById(clientId);
       await repository.findClientById(clientId);
     } catch (err) {
       expect(err.message).toMatch(ERR_MESSAGES.NO_RECORD_FOUND);

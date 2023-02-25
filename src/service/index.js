@@ -18,8 +18,8 @@ class Service {
     await this.repository.updateClient(params);
   }
 
-  async deleteClient(id) {
-    await this.repository.deleteClient(id);
+  async deleteClientById(id) {
+    await this.repository.deleteClientById(id);
   }
 
   async readAllClients() {

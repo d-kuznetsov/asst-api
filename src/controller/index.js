@@ -56,9 +56,9 @@ class Controller {
     }
   }
 
-  async deleteClient(req, reply) {
+  async deleteClientById(req, reply) {
     try {
-      await this.service.deleteClient(req.params.id);
+      await this.service.deleteClientById(req.params.id);
       reply.send({ status: "Ok" });
     } catch (err) {
       if (err instanceof ClientError) {

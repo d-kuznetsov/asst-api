@@ -149,7 +149,7 @@ class MongoDB {
     return this._updateOne("clients", params);
   }
 
-  async deleteClient(id) {
+  async deleteClientById(id) {
     checkId(id);
     this._deleteOne("clients", { id });
   }

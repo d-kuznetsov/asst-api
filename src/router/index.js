@@ -88,7 +88,7 @@ const protectedRouteOptions = {
     },
   },
 
-  deleteClient: {
+  deleteClientById: {
     method: "DELETE",
     url: "/client/:id",
     schema: {
