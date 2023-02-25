@@ -8,6 +8,22 @@ const checkId = (id) => {
   return true;
 };
 
+const adaptId = (params) => {
+  let newParams;
+  if (params.id) {
+    const { id, ...restParams } = params;
+    newParams = {
+      _id: new ObjectId(id),
+      ...restParams,
+    };
+  } else {
+    newParams = {
+      ...params,
+    };
+  }
+  return newParams;
+};
+
 class MongoDB {
   constructor(uri = "mongodb://localhost:27017/") {
     this.client = new MongoClient(uri);
@@ -28,25 +44,14 @@ class MongoDB {
   }
 
   async _findOne(collection, query) {
-    let modifiedQuery;
-    if (query.id) {
-      const { id, ...restProps } = query;
-      modifiedQuery = {
-        _id: new ObjectId(id),
-        ...restProps,
-      };
-    } else {
-      modifiedQuery = {
-        ...query,
-      };
-    }
-
+    let internalQuery = adaptId(query);
     let result;
+
     try {
       result = await this.client
         .db("assistanst")
         .collection(collection)
-        .findOne(modifiedQuery);
+        .findOne(internalQuery);
     } catch (err) {
       console.error(err);
       throw new ServerError();
@@ -62,14 +67,16 @@ class MongoDB {
     };
   }
 
-  async _updateOne(collection, params) {
+  async _updateOne(collection, query) {
+    let internalQuery = adaptId(query);
     let result;
+
     try {
-      const { id, ...updateParams } = params;
+      const { _id, ...updateParams } = internalQuery;
       result = await this.client
         .db("assistanst")
         .collection(collection)
-        .updateOne({ _id: new ObjectId(id) }, { $set: updateParams });
+        .updateOne({ _id }, { $set: updateParams });
     } catch (err) {
       console.error(err);
       throw new ServerError();
@@ -80,25 +87,14 @@ class MongoDB {
   }
 
   async _deleteOne(collection, query) {
-    let modifiedQuery;
-    if (query.id) {
-      const { id, ...restProps } = query;
-      modifiedQuery = {
-        _id: new ObjectId(id),
-        ...restProps,
-      };
-    } else {
-      modifiedQuery = {
-        ...query,
-      };
-    }
-
+    let internalQuery = adaptId(query);
     let result;
+
     try {
       result = await this.client
         .db("assistanst")
         .collection(collection)
-        .deleteOne(modifiedQuery);
+        .deleteOne(internalQuery);
     } catch (err) {
       console.error(err);
       throw new ServerError();
