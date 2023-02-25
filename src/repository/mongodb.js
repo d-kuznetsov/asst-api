@@ -79,6 +79,35 @@ class MongoDB {
     }
   }
 
+  async _deleteOne(collection, query) {
+    let modifiedQuery;
+    if (query.id) {
+      const { id, ...restProps } = query;
+      modifiedQuery = {
+        _id: new ObjectId(id),
+        ...restProps,
+      };
+    } else {
+      modifiedQuery = {
+        ...query,
+      };
+    }
+
+    let result;
+    try {
+      result = await this.client
+        .db("assistanst")
+        .collection(collection)
+        .deleteOne(modifiedQuery);
+    } catch (err) {
+      console.error(err);
+      throw new ServerError();
+    }
+    if (!result.deletedCount) {
+      throw new ClientError(ERR_MESSAGES.NO_RECORD_FOUND);
+    }
+  }
+
   async connect() {
     try {
       await this.client.connect();
@@ -103,22 +132,9 @@ class MongoDB {
     return this._updateOne("clients", params);
   }
 
-  async deleteClient(clientId) {
-    checkId(clientId);
-
-    let result;
-    try {
-      result = await this.client
-        .db("assistanst")
-        .collection("clients")
-        .deleteOne({ _id: new ObjectId(clientId) });
-    } catch (err) {
-      console.error(err);
-      throw new ServerError();
-    }
-    if (!result.deletedCount) {
-      throw new ClientError(ERR_MESSAGES.NO_RECORD_FOUND);
-    }
+  async deleteClient(id) {
+    checkId(id);
+    this._deleteOne("clients", { id });
   }
 
   async findClients(params = {}) {
