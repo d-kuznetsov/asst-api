@@ -13,6 +13,41 @@ class MongoDB {
     this.client = new MongoClient(uri);
   }
 
+  async _findOne(collection, query) {
+    let modifiedQuery;
+    if (query.id) {
+      const { id, ...restProps } = query;
+      modifiedQuery = {
+        _id: new ObjectId(id),
+        ...restProps,
+      };
+    } else {
+      modifiedQuery = {
+        ...query,
+      };
+    }
+
+    let result;
+    try {
+      result = await this.client
+        .db("assistanst")
+        .collection(collection)
+        .findOne(modifiedQuery);
+    } catch (err) {
+      console.error(err);
+      throw new ServerError();
+    }
+    if (!result) {
+      throw new ClientError(ERR_MESSAGES.NO_RECORD_FOUND);
+    }
+
+    const { _id, ...restProps } = result;
+    return {
+      id: _id.toString(),
+      ...restProps,
+    };
+  }
+
   async connect() {
     try {
       await this.client.connect();
@@ -37,27 +72,9 @@ class MongoDB {
     return result.insertedId.toString();
   }
 
-  async readClient(clientId) {
-    checkId(clientId);
-
-    let result;
-    try {
-      result = await this.client
-        .db("assistanst")
-        .collection("clients")
-        .findOne({ _id: new ObjectId(clientId) });
-    } catch (err) {
-      console.error(err);
-      throw new ServerError();
-    }
-    if (!result) {
-      throw new ClientError(ERR_MESSAGES.NO_RECORD_FOUND);
-    }
-    const { _id, ...restProps } = result;
-    return {
-      id: _id.toString(),
-      ...restProps,
-    };
+  async readClient(id) {
+    checkId(id);
+    return this._findOne("clients", { id });
   }
 
   async updateClient(params) {
