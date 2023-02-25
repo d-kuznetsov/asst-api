@@ -70,13 +70,13 @@ class Service {
     });
   }
 
+  async findAllAssistants() {
+    return this.repository.findManyAssistants({});
+  }
+
   async findAsstConfigByOrigin(origin) {
     const { config } = await this.repository.findAssistant({ origin });
     return `const c=${config};export{c};`;
-  }
-
-  async findAllAssistants() {
-    return this.repository.findManyAssistants({});
   }
 }
 
