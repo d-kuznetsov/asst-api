@@ -104,6 +104,27 @@ class MongoDB {
     }
   }
 
+  async _find(collection, query) {
+    let result;
+    try {
+      result = await this.client
+        .db("assistanst")
+        .collection(collection)
+        .find(query)
+        .toArray();
+    } catch (err) {
+      console.error(err);
+      throw new ServerError();
+    }
+
+    return result.map(({ _id, ...restProps }) => {
+      return {
+        id: _id.toString(),
+        ...restProps,
+      };
+    });
+  }
+
   async connect() {
     try {
       await this.client.connect();
@@ -134,23 +155,7 @@ class MongoDB {
   }
 
   async findClients(params = {}) {
-    let result;
-    try {
-      result = await this.client
-        .db("assistanst")
-        .collection("clients")
-        .find()
-        .toArray(params);
-    } catch (err) {
-      console.error(err);
-      throw new ServerError();
-    }
-    return result.map(({ _id, ...restProps }) => {
-      return {
-        id: _id.toString(),
-        ...restProps,
-      };
-    });
+    return this._find("clients", params);
   }
 
   async createUser(params) {
