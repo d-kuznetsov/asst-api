@@ -100,9 +100,9 @@ class Controller {
     }
   }
 
-  async readAllClients(_, reply) {
+  async findAllClients(_, reply) {
     try {
-      const clients = await this.service.readAllClients();
+      const clients = await this.service.findAllClients();
       reply.send(clients);
     } catch (err) {
       if (err instanceof ClientError) {
@@ -134,9 +134,9 @@ class Controller {
     }
   }
 
-  async findManyAssistants(_, reply) {
+  async findAllAssistants(_, reply) {
     try {
-      const assistants = await this.service.findManyAssistants();
+      const assistants = await this.service.findAllAssistants();
       reply.send(assistants);
     } catch (err) {
       if (err instanceof ClientError) {

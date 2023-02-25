@@ -59,7 +59,7 @@ class Service {
     await this.repository.deleteClientById(id);
   }
 
-  async readAllClients() {
+  async findAllClients() {
     return this.repository.findManyClients({});
   }
 
@@ -75,7 +75,7 @@ class Service {
     return `const c=${config};export{c};`;
   }
 
-  async findManyAssistants() {
+  async findAllAssistants() {
     return this.repository.findManyAssistants({});
   }
 }

@@ -43,7 +43,7 @@ const protectedRouteOptions = {
     },
   },
 
-  readAllClients: {
+  findAllClients: {
     method: "GET",
     url: "/clients",
     schema: {
@@ -122,7 +122,7 @@ const protectedRouteOptions = {
     },
   },
 
-  findManyAssistants: {
+  findAllAssistants: {
     method: "GET",
     url: "/assistants",
     schema: {
