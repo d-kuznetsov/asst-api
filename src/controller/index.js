@@ -134,9 +134,9 @@ class Controller {
     }
   }
 
-  async findAssistants(_, reply) {
+  async findManyAssistants(_, reply) {
     try {
-      const assistants = await this.service.findAssistants();
+      const assistants = await this.service.findManyAssistants();
       reply.send(assistants);
     } catch (err) {
       if (err instanceof ClientError) {

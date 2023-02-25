@@ -60,7 +60,7 @@ class Service {
   }
 
   async readAllClients() {
-    return this.repository.findClients({});
+    return this.repository.findManyClients({});
   }
 
   async createAssistant(params) {
@@ -75,8 +75,8 @@ class Service {
     return `const c=${config};export{c};`;
   }
 
-  async findAssistants() {
-    return this.repository.findAssistants({});
+  async findManyAssistants() {
+    return this.repository.findManyAssistants({});
   }
 }
 

@@ -32,7 +32,7 @@ class MongoDB extends MongoDbBase {
     this._deleteOne("clients", { id });
   }
 
-  async findClients(query) {
+  async findManyClients(query) {
     return this._findMany("clients", query);
   }
 
@@ -44,7 +44,7 @@ class MongoDB extends MongoDbBase {
     return this._findOne("assistants", query);
   }
 
-  async findAssistants(query) {
+  async findManyAssistants(query) {
     return this._findMany("assistants", query);
   }
 }

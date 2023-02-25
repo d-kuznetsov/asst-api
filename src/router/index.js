@@ -122,7 +122,7 @@ const protectedRouteOptions = {
     },
   },
 
-  findAssistants: {
+  findManyAssistants: {
     method: "GET",
     url: "/assistants",
     schema: {
