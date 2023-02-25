@@ -62,6 +62,23 @@ class MongoDB {
     };
   }
 
+  async _updateOne(collection, params) {
+    let result;
+    try {
+      const { id, ...updateParams } = params;
+      result = await this.client
+        .db("assistanst")
+        .collection(collection)
+        .updateOne({ _id: new ObjectId(id) }, { $set: updateParams });
+    } catch (err) {
+      console.error(err);
+      throw new ServerError();
+    }
+    if (!result.modifiedCount) {
+      throw new ClientError(ERR_MESSAGES.NO_RECORD_FOUND);
+    }
+  }
+
   async connect() {
     try {
       await this.client.connect();
@@ -83,21 +100,7 @@ class MongoDB {
 
   async updateClient(params) {
     checkId(params.id);
-
-    let result;
-    try {
-      const { id: clientId, ...restParams } = params;
-      result = await this.client
-        .db("assistanst")
-        .collection("clients")
-        .updateOne({ _id: new ObjectId(clientId) }, { $set: restParams });
-    } catch (err) {
-      console.error(err);
-      throw new ServerError();
-    }
-    if (!result.modifiedCount) {
-      throw new ClientError(ERR_MESSAGES.NO_RECORD_FOUND);
-    }
+    return this._updateOne("clients", params);
   }
 
   async deleteClient(clientId) {
