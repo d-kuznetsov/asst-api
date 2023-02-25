@@ -76,7 +76,7 @@ class Service {
   }
 
   async findAssistants() {
-    return this.repository.findAssistants();
+    return this.repository.findAssistants({});
   }
 }
 

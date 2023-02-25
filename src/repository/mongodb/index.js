@@ -32,8 +32,8 @@ class MongoDB extends MongoDbBase {
     this._deleteOne("clients", { id });
   }
 
-  async findClients(params = {}) {
-    return this._findMany("clients", params);
+  async findClients(query) {
+    return this._findMany("clients", query);
   }
 
   async createAssistant(params) {
@@ -44,8 +44,8 @@ class MongoDB extends MongoDbBase {
     return this._findOne("assistants", query);
   }
 
-  async findAssistants(params = {}) {
-    return this._findMany("assistants", params);
+  async findAssistants(query) {
+    return this._findMany("assistants", query);
   }
 }
 
