@@ -43,6 +43,26 @@ const protectedRouteOptions = {
     },
   },
 
+  readAllClients: {
+    method: "GET",
+    url: "/clients",
+    schema: {
+      response: {
+        200: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              id: { type: "string" },
+              name: { type: "string" },
+              email: { type: "string" },
+            },
+          },
+        },
+      },
+    },
+  },
+
   updateClient: {
     method: "PATCH",
     url: "/client",

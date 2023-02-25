@@ -70,6 +70,20 @@ class Controller {
     }
   }
 
+  async readAllClients(_, reply) {
+    try {
+      const clients = await this.service.readAllClients();
+      reply.send(clients);
+    } catch (err) {
+      if (err instanceof ClientError) {
+        reply.code(400).send(createErrObj(400, err.message));
+        return;
+      }
+      console.error(err);
+      reply.code(500).send(createErrObj(500));
+    }
+  }
+
   async registerUser(req, reply) {
     try {
       const user = await this.service.registerUser(req.body);

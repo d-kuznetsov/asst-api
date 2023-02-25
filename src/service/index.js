@@ -22,6 +22,10 @@ class Service {
     await this.repository.deleteClient(id);
   }
 
+  async readAllClients() {
+    return this.repository.findClients({});
+  }
+
   async registerUser(params) {
     try {
       await this.repository.findUser({ email: params.email });
