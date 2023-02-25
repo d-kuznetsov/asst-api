@@ -144,7 +144,7 @@ const protectedRouteOptions = {
 };
 
 const loginRegisterRouteOptions = {
-  registerUser: {
+  register: {
     method: "POST",
     url: "/register",
     schema: {

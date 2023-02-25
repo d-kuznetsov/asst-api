@@ -18,9 +18,9 @@ class Controller {
     this.service = service;
   }
 
-  async registerUser(req, reply) {
+  async register(req, reply) {
     try {
-      const user = await this.service.registerUser(req.body);
+      const user = await this.service.register(req.body);
       const token = await reply.jwtSign(user);
       reply.send({ token });
     } catch (err) {

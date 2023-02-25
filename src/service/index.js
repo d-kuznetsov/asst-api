@@ -6,7 +6,7 @@ class Service {
     this.repository = repository;
   }
 
-  async registerUser(params) {
+  async register(params) {
     try {
       await this.repository.findUser({ email: params.email });
     } catch (err) {
