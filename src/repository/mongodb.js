@@ -24,7 +24,7 @@ const adaptId = (params) => {
   return newParams;
 };
 
-class MongoDB {
+class MongoDbBase {
   constructor(uri = "mongodb://localhost:27017/") {
     this.client = new MongoClient(uri);
   }
@@ -135,6 +135,17 @@ class MongoDB {
     }
   }
 
+  async disconnect() {
+    await this.client.close();
+    console.log("Database connection closed");
+  }
+}
+
+class MongoDB extends MongoDbBase {
+  constructor(uri) {
+    super(uri);
+  }
+
   async createClient(params) {
     return this._insertOne("clients", params);
   }
@@ -172,11 +183,6 @@ class MongoDB {
 
   async findAssistant(query) {
     return this._findOne("assistants", query);
-  }
-
-  async disconnect() {
-    await this.client.close();
-    console.log("Database connection closed");
   }
 }
 
