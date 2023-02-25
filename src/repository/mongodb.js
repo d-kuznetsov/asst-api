@@ -13,6 +13,20 @@ class MongoDB {
     this.client = new MongoClient(uri);
   }
 
+  async _insertOne(collection, document) {
+    let result;
+    try {
+      result = await this.client
+        .db("assistanst")
+        .collection(collection)
+        .insertOne(document);
+    } catch (err) {
+      console.error(err);
+      throw new ServerError();
+    }
+    return result.insertedId.toString();
+  }
+
   async _findOne(collection, query) {
     let modifiedQuery;
     if (query.id) {
@@ -59,17 +73,7 @@ class MongoDB {
   }
 
   async createClient(params) {
-    let result;
-    try {
-      result = await this.client
-        .db("assistanst")
-        .collection("clients")
-        .insertOne(params);
-    } catch (err) {
-      console.error(err);
-      throw new ServerError();
-    }
-    return result.insertedId.toString();
+    return this._insertOne("clients", params);
   }
 
   async readClient(id) {
@@ -135,17 +139,7 @@ class MongoDB {
   }
 
   async createUser(params) {
-    let result;
-    try {
-      result = await this.client
-        .db("assistanst")
-        .collection("users")
-        .insertOne(params);
-    } catch (err) {
-      console.error(err);
-      throw new ServerError();
-    }
-    return result.insertedId.toString();
+    return this._insertOne("users", params);
   }
 
   async findUser(params) {
@@ -170,17 +164,7 @@ class MongoDB {
   }
 
   async createAssistant(params) {
-    let result;
-    try {
-      result = await this.client
-        .db("assistanst")
-        .collection("assistants")
-        .insertOne(params);
-    } catch (err) {
-      console.error(err);
-      throw new ServerError();
-    }
-    return result.insertedId.toString();
+    return this._insertOne("assistants", params);
   }
 
   async findAssistant(query) {
