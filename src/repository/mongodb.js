@@ -163,24 +163,7 @@ class MongoDB {
   }
 
   async findUser(params) {
-    let result;
-    try {
-      result = await this.client
-        .db("assistanst")
-        .collection("users")
-        .findOne(params);
-    } catch (err) {
-      console.error(err);
-      throw new ServerError();
-    }
-    if (!result) {
-      throw new ClientError(ERR_MESSAGES.NO_RECORD_FOUND);
-    }
-    const { _id, ...restProps } = result;
-    return {
-      id: _id.toString(),
-      ...restProps,
-    };
+    return this._findOne("users", params);
   }
 
   async createAssistant(params) {
