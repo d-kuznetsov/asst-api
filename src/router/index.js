@@ -121,6 +121,26 @@ const protectedRouteOptions = {
       },
     },
   },
+
+  findAssistants: {
+    method: "GET",
+    url: "/assistants",
+    schema: {
+      response: {
+        200: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              id: { type: "string" },
+              config: { type: "string" },
+              origin: { type: "string" },
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
 const loginRegisterRouteOptions = {

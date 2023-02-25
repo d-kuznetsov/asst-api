@@ -146,6 +146,14 @@ class MongoDB extends MongoDbBase {
     super(uri);
   }
 
+  async createUser(params) {
+    return this._insertOne("users", params);
+  }
+
+  async findUser(params) {
+    return this._findOne("users", params);
+  }
+
   async createClient(params) {
     return this._insertOne("clients", params);
   }
@@ -169,20 +177,16 @@ class MongoDB extends MongoDbBase {
     return this._find("clients", params);
   }
 
-  async createUser(params) {
-    return this._insertOne("users", params);
-  }
-
-  async findUser(params) {
-    return this._findOne("users", params);
-  }
-
   async createAssistant(params) {
     return this._insertOne("assistants", params);
   }
 
   async findAssistant(query) {
     return this._findOne("assistants", query);
+  }
+
+  async findAssistants(params = {}) {
+    return this._find("assistants", params);
   }
 }
 

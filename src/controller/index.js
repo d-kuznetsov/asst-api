@@ -18,6 +18,36 @@ class Controller {
     this.service = service;
   }
 
+  async registerUser(req, reply) {
+    try {
+      const user = await this.service.registerUser(req.body);
+      const token = await reply.jwtSign(user);
+      reply.send({ token });
+    } catch (err) {
+      if (err instanceof ClientError) {
+        reply.code(400).send(createErrObj(400, err.message));
+        return;
+      }
+      console.error(err);
+      reply.code(500).send(createErrObj(500));
+    }
+  }
+
+  async login(req, reply) {
+    try {
+      const user = await this.service.login(req.body);
+      const token = await reply.jwtSign(user);
+      reply.send({ token });
+    } catch (err) {
+      if (err instanceof ClientError) {
+        reply.code(400).send(createErrObj(400, err.message));
+        return;
+      }
+      console.error(err);
+      reply.code(500).send(createErrObj(500));
+    }
+  }
+
   async createClient(req, reply) {
     try {
       const id = await this.service.createClient(req.body);
@@ -84,36 +114,6 @@ class Controller {
     }
   }
 
-  async registerUser(req, reply) {
-    try {
-      const user = await this.service.registerUser(req.body);
-      const token = await reply.jwtSign(user);
-      reply.send({ token });
-    } catch (err) {
-      if (err instanceof ClientError) {
-        reply.code(400).send(createErrObj(400, err.message));
-        return;
-      }
-      console.error(err);
-      reply.code(500).send(createErrObj(500));
-    }
-  }
-
-  async login(req, reply) {
-    try {
-      const user = await this.service.login(req.body);
-      const token = await reply.jwtSign(user);
-      reply.send({ token });
-    } catch (err) {
-      if (err instanceof ClientError) {
-        reply.code(400).send(createErrObj(400, err.message));
-        return;
-      }
-      console.error(err);
-      reply.code(500).send(createErrObj(500));
-    }
-  }
-
   async createAssistant(req, reply) {
     try {
       const id = await this.service.createAssistant(req.body);
@@ -131,6 +131,20 @@ class Controller {
       reply.header("Content-Type", "application/javascript; charset=UTF-8");
       reply.send(config);
       return reply;
+    }
+  }
+
+  async findAssistants(_, reply) {
+    try {
+      const assistants = await this.service.findAssistants();
+      reply.send(assistants);
+    } catch (err) {
+      if (err instanceof ClientError) {
+        reply.code(400).send(createErrObj(400, err.message));
+        return;
+      }
+      console.error(err);
+      reply.code(500).send(createErrObj(500));
     }
   }
 }

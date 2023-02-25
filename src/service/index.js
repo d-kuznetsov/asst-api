@@ -6,26 +6,6 @@ class Service {
     this.repository = repository;
   }
 
-  async createClient(params) {
-    return await this.repository.createClient(params);
-  }
-
-  async findClientById(id) {
-    return await this.repository.findClientById(id);
-  }
-
-  async updateClient(params) {
-    await this.repository.updateClient(params);
-  }
-
-  async deleteClientById(id) {
-    await this.repository.deleteClientById(id);
-  }
-
-  async readAllClients() {
-    return this.repository.findClients({});
-  }
-
   async registerUser(params) {
     try {
       await this.repository.findUser({ email: params.email });
@@ -63,6 +43,26 @@ class Service {
     return user;
   }
 
+  async createClient(params) {
+    return await this.repository.createClient(params);
+  }
+
+  async findClientById(id) {
+    return await this.repository.findClientById(id);
+  }
+
+  async updateClient(params) {
+    await this.repository.updateClient(params);
+  }
+
+  async deleteClientById(id) {
+    await this.repository.deleteClientById(id);
+  }
+
+  async readAllClients() {
+    return this.repository.findClients({});
+  }
+
   async createAssistant(params) {
     return await this.repository.createAssistant({
       ...params,
@@ -73,6 +73,10 @@ class Service {
   async findAsstConfigByOrigin(origin) {
     const { config } = await this.repository.findAssistant({ origin });
     return `const c=${config};export{c};`;
+  }
+
+  async findAssistants() {
+    return this.repository.findAssistants();
   }
 }
 
