@@ -1,6 +1,8 @@
 require("dotenv").config();
 const fastify = require("fastify")({
-  logger: false,
+  logger: {
+    level: "warn",
+  },
 });
 
 fastify.register(require("./auth"));
@@ -19,7 +21,7 @@ fastify.register(require("@fastify/static"), {
 const Repository = require("./repository").MongoDB;
 const { Service } = require("./service");
 const { Controller } = require("./controller");
-const { defineRouterRegister } = require("./router");
+const { createRouter } = require("./router");
 
 const repository = new Repository();
 const service = new Service(repository);
@@ -30,7 +32,7 @@ fastify.addHook(
   controller.replaceAssistantConfig.bind(controller)
 );
 
-fastify.register(defineRouterRegister(controller));
+fastify.register(createRouter(controller));
 
 const start = async () => {
   try {

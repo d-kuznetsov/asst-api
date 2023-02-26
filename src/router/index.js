@@ -7,7 +7,7 @@ const protectedRoutes = {
   ...assistantRoutes,
 };
 
-const defineRouterRegister = (controller) => {
+const createRouter = (controller) => {
   return (fastify, _, done) => {
     Object.keys(protectedRoutes).forEach((key) => {
       fastify.route({
@@ -29,5 +29,5 @@ const defineRouterRegister = (controller) => {
 };
 
 module.exports = {
-  defineRouterRegister,
+  createRouter,
 };
