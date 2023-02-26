@@ -131,7 +131,7 @@ class MongoDbBase {
       await this.client.db("assistants").command({ ping: 1 });
     } catch (err) {
       console.error(err);
-      throw new ServerError(ERR_MESSAGES.CONNECTION_FAILED);
+      throw new ServerError(ERR_MESSAGES.DB_CONNECTION_FAILED);
     }
   }
 

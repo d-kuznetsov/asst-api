@@ -9,7 +9,7 @@ class Service {
   async register(params) {
     const applicant = await this.repository.findUser({ email: params.email });
     if (applicant) {
-      throw new ClientError("A user with this email already exists");
+      throw new ClientError(ERR_MESSAGES.AUTH_USER_EXISTS);
     }
     const id = await this.repository.createUser(params);
     return {
@@ -20,7 +20,7 @@ class Service {
 
   async login(params) {
     const { email, password } = params;
-    const authErr = new ClientError("Email or/and password are not correct");
+    const authErr = new ClientError(ERR_MESSAGES.AUTH_INVALID_CREDENTIALS);
     const user = await this.repository.findUser({ email });
     if (!user) {
       throw authErr;

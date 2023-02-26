@@ -4,10 +4,12 @@ const ERR_TYPES = {
 };
 
 const ERR_MESSAGES = {
-  CONNECTION_FAILED: "Database connection failed",
-  INTERNAL_DB_ERR: "Internal database error",
+  DB_CONNECTION_FAILED: "Database connection failed",
+  DB_INTERNAL_ERR: "Internal database error",
   NO_RECORD_FOUND: "No record found",
   INVALID_ID: "Invalid id",
+  AUTH_USER_EXISTS: "User with this email already exists",
+  AUTH_INVALID_CREDENTIALS: "Email or/and password are not correct",
 };
 
 class CustomError extends Error {
@@ -19,7 +21,7 @@ class CustomError extends Error {
 }
 
 class ServerError extends CustomError {
-  constructor(message = ERR_MESSAGES.INTERNAL_DB_ERR) {
+  constructor(message = ERR_MESSAGES.DB_INTERNAL_ERR) {
     super(message);
     this.type = ERR_TYPES.SERVER_ERR;
   }
