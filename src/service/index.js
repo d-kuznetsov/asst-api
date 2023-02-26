@@ -44,19 +44,19 @@ class Service {
   }
 
   async createClient(params) {
-    return await this.repository.createClient(params);
+    return this.repository.createClient(params);
   }
 
   async findClientById(id) {
-    return await this.repository.findClientById(id);
+    return this.repository.findClientById(id);
   }
 
   async updateClient(params) {
-    await this.repository.updateClient(params);
+    return this.repository.updateClient(params);
   }
 
   async deleteClientById(id) {
-    await this.repository.deleteClientById(id);
+    return this.repository.deleteClientById(id);
   }
 
   async findAllClients() {
@@ -64,7 +64,7 @@ class Service {
   }
 
   async createAssistant(params) {
-    return await this.repository.createAssistant({
+    return this.repository.createAssistant({
       ...params,
       config: extractAsstConfig(params.config),
     });
