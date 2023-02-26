@@ -57,7 +57,7 @@ class MongoDbBase {
       throw new ServerError();
     }
     if (!result) {
-      throw new ClientError(ERR_MESSAGES.NO_RECORD_FOUND);
+      return null;
     }
 
     const { _id, ...restProps } = result;

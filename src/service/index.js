@@ -1,4 +1,4 @@
-const { ClientError } = require("../error");
+const { ClientError, ERR_MESSAGES } = require("../error");
 const { extractAsstConfig } = require("../lib/assistant-config-wrap");
 
 class Service {
@@ -7,37 +7,25 @@ class Service {
   }
 
   async register(params) {
-    try {
-      await this.repository.findUser({ email: params.email });
-    } catch (err) {
-      if (!(err instanceof ClientError)) {
-        throw err;
-      }
-      const id = await this.repository.createUser(params);
-      // eslint-disable-next-line
-      const { _id, ...restUserProps } = params;
-      return {
-        id,
-        ...restUserProps,
-      };
+    const applicant = await this.repository.findUser({ email: params.email });
+    if (applicant) {
+      throw new ClientError("A user with this email already exists");
     }
-    throw new ClientError("A user with this email already exists");
+    const id = await this.repository.createUser(params);
+    return {
+      id,
+      ...params,
+    };
   }
 
   async login(params) {
     const { email, password } = params;
     const authErr = new ClientError("Email or/and password are not correct");
-    let user;
-
-    try {
-      user = await this.repository.findUser({ email });
-    } catch (err) {
-      if (err instanceof ClientError) {
-        throw authErr;
-      }
-      throw err;
+    const user = await this.repository.findUser({ email });
+    if (!user) {
+      throw authErr;
     }
-    if (user.password !== password) {
+    if (password !== user.password) {
       throw authErr;
     }
     return user;
@@ -48,7 +36,11 @@ class Service {
   }
 
   async findClientById(id) {
-    return this.repository.findClientById(id);
+    const client = await this.repository.findClientById(id);
+    if (!client) {
+      throw new ClientError(ERR_MESSAGES.NO_RECORD_FOUND);
+    }
+    return client;
   }
 
   async updateClient(params) {
@@ -75,8 +67,11 @@ class Service {
   }
 
   async findAsstConfigByOrigin(origin) {
-    const { config } = await this.repository.findAssistant({ origin });
-    return `const c=${config};export{c};`;
+    const assistant = await this.repository.findAssistant({ origin });
+    if (!assistant) {
+      throw new ClientError(ERR_MESSAGES.NO_RECORD_FOUND);
+    }
+    return `const c=${assistant.config};export{c};`;
   }
 }
 
