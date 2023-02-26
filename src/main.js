@@ -1,19 +1,22 @@
 require("dotenv").config();
-const fastify = require("fastify")({
+
+const path = require("path");
+const fastify = require("fastify");
+const fastifyMultipart = require("@fastify/multipart");
+const fastifyStatic = require("@fastify/static");
+
+const server = fastify({
   logger: {
     level: "warn",
   },
 });
 
-fastify.register(require("./auth"));
+server.register(require("./auth"));
 
-fastify.register(require("@fastify/multipart"), {
+server.register(fastifyMultipart, {
   attachFieldsToBody: "keyValues",
 });
-
-const path = require("path");
-
-fastify.register(require("@fastify/static"), {
+server.register(fastifyStatic, {
   root: path.join(process.cwd(), "/build"),
   prefix: "/", // optional: default '/'
 });
@@ -26,21 +29,21 @@ const { createRouter } = require("./router");
 const repository = new Repository();
 const service = new Service(repository);
 const controller = new Controller(service);
+const router = createRouter(controller);
 
-fastify.addHook(
+server.register(router);
+server.addHook(
   "preHandler",
   controller.replaceAssistantConfig.bind(controller)
 );
 
-fastify.register(createRouter(controller));
-
 const start = async () => {
   try {
     await repository.connect();
-    await fastify.listen({ port: 3000 });
+    await server.listen({ port: 3000 });
     console.log("Server is listenning on port 3000");
   } catch (err) {
-    fastify.log.error(err);
+    server.log.error(err);
     await repository.disconnect();
     process.exit(1);
   }
