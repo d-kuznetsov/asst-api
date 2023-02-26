@@ -79,6 +79,15 @@ class Controller {
     }
   }
 
+  async findAllAssistants(_, reply) {
+    try {
+      const assistants = await this.service.findAllAssistants();
+      reply.send(assistants);
+    } catch (err) {
+      handleError(err, reply);
+    }
+  }
+
   async replaceAssistantConfig(req, reply) {
     if (req.url.includes("assistant-config")) {
       const { origin } = req.headers;
@@ -86,15 +95,6 @@ class Controller {
       reply.header("Content-Type", "application/javascript; charset=UTF-8");
       reply.send(config);
       return reply;
-    }
-  }
-
-  async findAllAssistants(_, reply) {
-    try {
-      const assistants = await this.service.findAllAssistants();
-      reply.send(assistants);
-    } catch (err) {
-      handleError(err, reply);
     }
   }
 }
