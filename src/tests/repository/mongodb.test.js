@@ -1,10 +1,17 @@
 /* eslint-disable */
-const Repositiry = require("../../repository/mongodb/base").MongoDbBase;
+const {
+  MongoDbBase,
+  checkId,
+  adaptId,
+} = require("../../repository/mongodb/base");
+
+const { ClientError } = require("../../error");
 
 const COLLECTION = "test-persons";
 
+// TODO add handling errors
 describe("MongoDB Base Repo", () => {
-  const repository = new Repositiry();
+  const repository = new MongoDbBase();
   const persons = [
     { name: "John Smith", age: 29 },
     { name: "Jane Smith", age: 28 },
@@ -13,6 +20,28 @@ describe("MongoDB Base Repo", () => {
 
   beforeAll(async () => {
     await repository.connect();
+  });
+
+  test("check correct id", () => {
+    expect(checkId("63f2d01c3249aed5b5ff9149")).toEqual(true);
+  });
+
+  test("check wrong id", () => {
+    try {
+      checkId("wrong-id");
+    } catch (err) {
+      expect(err instanceof ClientError).toEqual(true);
+    }
+  });
+
+  test("replace id with _id", () => {
+    expect.assertions(2);
+    const params = {
+      id: "63f2d01c3249aed5b5ff9149",
+    };
+    const newParams = adaptId(params);
+    expect(newParams.id).toEqual(undefined);
+    expect(newParams._id.toString()).toEqual(params.id);
   });
 
   test("createOne", async () => {

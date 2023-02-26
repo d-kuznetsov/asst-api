@@ -144,4 +144,5 @@ class MongoDbBase {
 module.exports = {
   MongoDbBase,
   checkId,
+  adaptId,
 };
