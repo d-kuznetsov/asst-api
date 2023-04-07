@@ -1,28 +1,16 @@
 require("dotenv").config();
 
-const fastify = require("fastify")({
-  logger: {
-    level: "warn",
-  },
-});
-
-const createServer = require("./server");
 const Repository = require("./repository").MongoDB;
 const { Service } = require("./service");
 const { Controller } = require("./controller");
 const { createRouter } = require("./router");
+const { createServer } = require("./server");
 
 const repository = new Repository();
 const service = new Service(repository);
 const controller = new Controller(service);
 const router = createRouter(controller);
-const server = createServer(fastify, router);
-
-// TODO: to delete
-server.addHook(
-  "preHandler",
-  controller.replaceAssistantConfig.bind(controller)
-);
+const server = createServer(router);
 
 const start = async () => {
   try {

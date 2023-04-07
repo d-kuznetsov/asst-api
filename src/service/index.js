@@ -1,5 +1,4 @@
 const { ClientError, ERR_MESSAGES } = require("../error");
-const { extractAsstConfig } = require("../lib/assistant-config-wrap");
 
 class Service {
   constructor(repository) {
@@ -56,22 +55,11 @@ class Service {
   }
 
   async createAssistant(params) {
-    return this.repository.createAssistant({
-      ...params,
-      config: extractAsstConfig(params.config),
-    });
+    return this.repository.createAssistant(params);
   }
 
   async findAllAssistants() {
     return this.repository.findManyAssistants({});
-  }
-
-  async findAsstConfigByOrigin(origin) {
-    const assistant = await this.repository.findAssistant({ origin });
-    if (!assistant) {
-      throw new ClientError(ERR_MESSAGES.NO_RECORD_FOUND);
-    }
-    return `const c=${assistant.config};export{c};`;
   }
 }
 

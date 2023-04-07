@@ -1,17 +1,15 @@
-const path = require("path");
-
+const Fastify = require("fastify");
 const fastifyMultipart = require("@fastify/multipart");
-const fastifyStatic = require("@fastify/static");
-
 const authPlugin = require("./auth");
 
-const createServer = (fastify, router) => {
+const createServer = (router) => {
+  const fastify = Fastify({
+    logger: {
+      level: "warn",
+    },
+  });
   fastify.register(fastifyMultipart, {
     attachFieldsToBody: "keyValues",
-  });
-  fastify.register(fastifyStatic, {
-    root: path.join(process.cwd(), "/build"),
-    prefix: "/", // optional: default '/'
   });
   fastify.register(authPlugin);
   fastify.register(router);
@@ -19,4 +17,6 @@ const createServer = (fastify, router) => {
   return fastify;
 };
 
-module.exports = createServer;
+module.exports = {
+  createServer,
+};

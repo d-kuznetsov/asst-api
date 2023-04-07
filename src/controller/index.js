@@ -87,16 +87,6 @@ class Controller {
       handleError(err, reply);
     }
   }
-
-  async replaceAssistantConfig(req, reply) {
-    if (req.url.includes("assistant-config")) {
-      const { origin } = req.headers;
-      const config = await this.service.findAsstConfigByOrigin(origin);
-      reply.header("Content-Type", "application/javascript; charset=UTF-8");
-      reply.send(config);
-      return reply;
-    }
-  }
 }
 
 module.exports = {
