@@ -1,28 +1,6 @@
-const { MongoClient, ObjectId } = require("mongodb");
-const { ServerError, ClientError, ERR_MESSAGES } = require("../../error");
-
-const checkId = (id) => {
-  if (!ObjectId.isValid(id)) {
-    throw new ClientError(ERR_MESSAGES.INVALID_ID);
-  }
-  return true;
-};
-
-const adaptId = (params) => {
-  let newParams;
-  if (params.id) {
-    const { id, ...restParams } = params;
-    newParams = {
-      _id: new ObjectId(id),
-      ...restParams,
-    };
-  } else {
-    newParams = {
-      ...params,
-    };
-  }
-  return newParams;
-};
+const { MongoClient } = require("mongodb");
+const { AppError } = require("../../errors");
+const { checkId, adaptId, handleMongoErr } = require("./utils");
 
 class MongoDbBase {
   constructor(uri = "mongodb://localhost:27017/") {
@@ -37,8 +15,10 @@ class MongoDbBase {
         .collection(collection)
         .insertOne(document);
     } catch (err) {
-      console.error(err);
-      throw new ServerError();
+      handleMongoErr(
+        err,
+        `Document failed to create in ${collection} collection`
+      );
     }
     return result.insertedId.toString();
   }
@@ -53,8 +33,10 @@ class MongoDbBase {
         .collection(collection)
         .findOne(internalQuery);
     } catch (err) {
-      console.error(err);
-      throw new ServerError();
+      handleMongoErr(
+        err,
+        `Document failed to find in ${collection} collection`
+      );
     }
     if (!result) {
       return null;
@@ -78,11 +60,16 @@ class MongoDbBase {
         .collection(collection)
         .updateOne({ _id }, { $set: updateParams });
     } catch (err) {
-      console.error(err);
-      throw new ServerError();
+      handleMongoErr(
+        err,
+        `Document failed to update in ${collection} collection`
+      );
     }
     if (!result.modifiedCount) {
-      throw new ClientError(ERR_MESSAGES.NO_RECORD_FOUND);
+      throw new AppError(
+        `Document is not found in ${collection} collection`,
+        404
+      );
     }
   }
 
@@ -96,11 +83,16 @@ class MongoDbBase {
         .collection(collection)
         .deleteOne(internalQuery);
     } catch (err) {
-      console.error(err);
-      throw new ServerError();
+      handleMongoErr(
+        err,
+        `Document failed to delete in ${collection} collection`
+      );
     }
     if (!result.deletedCount) {
-      throw new ClientError(ERR_MESSAGES.NO_RECORD_FOUND);
+      throw new AppError(
+        `Document is not found in ${collection} collection`,
+        404
+      );
     }
   }
 
@@ -113,8 +105,10 @@ class MongoDbBase {
         .find(query)
         .toArray();
     } catch (err) {
-      console.error(err);
-      throw new ServerError();
+      handleMongoErr(
+        err,
+        `Documents failed to find in ${collection} collection`
+      );
     }
 
     return result.map(({ _id, ...restProps }) => {
@@ -130,8 +124,7 @@ class MongoDbBase {
       await this.client.connect();
       await this.client.db("assistants").command({ ping: 1 });
     } catch (err) {
-      console.error(err);
-      throw new ServerError(ERR_MESSAGES.DB_CONNECTION_FAILED);
+      handleMongoErr(err);
     }
   }
 

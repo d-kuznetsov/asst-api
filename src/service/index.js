@@ -1,4 +1,4 @@
-const { ClientError, ERR_MESSAGES } = require("../error");
+const { AppError } = require("../errors");
 
 class Service {
   constructor(repository) {
@@ -8,7 +8,7 @@ class Service {
   async register(params) {
     const applicant = await this.repository.findUser({ email: params.email });
     if (applicant) {
-      throw new ClientError(ERR_MESSAGES.AUTH_USER_EXISTS);
+      throw new AppError("User already exists", 400);
     }
     const id = await this.repository.createUser(params);
     return {
@@ -19,7 +19,7 @@ class Service {
 
   async login(params) {
     const { email, password } = params;
-    const authErr = new ClientError(ERR_MESSAGES.AUTH_INVALID_CREDENTIALS);
+    const authErr = new AppError("Email or/and password are not correct", 400);
     const user = await this.repository.findUser({ email });
     if (!user) {
       throw authErr;
@@ -37,7 +37,7 @@ class Service {
   async findClientById(id) {
     const client = await this.repository.findClientById(id);
     if (!client) {
-      throw new ClientError(ERR_MESSAGES.NO_RECORD_FOUND);
+      throw new AppError("Client is not found", 404);
     }
     return client;
   }

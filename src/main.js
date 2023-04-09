@@ -5,12 +5,16 @@ const { Service } = require("./service");
 const { Controller } = require("./controller");
 const { createRouter } = require("./router");
 const { createServer } = require("./server");
+const { shutdown, initShutdown } = require("./shutdown");
 
 const repository = new Repository();
 const service = new Service(repository);
 const controller = new Controller(service);
 const router = createRouter(controller);
 const server = createServer(router);
+
+initShutdown();
+controller.on("error", shutdown);
 
 const start = async () => {
   try {

@@ -1,5 +1,5 @@
 const { STATUS_CODES } = require("http");
-const { ClientError } = require("../error");
+const { AppError } = require("../errors");
 
 const createErrorReplyObj = (statusCode, message) => {
   const errObj = {
@@ -12,15 +12,7 @@ const createErrorReplyObj = (statusCode, message) => {
   return errObj;
 };
 
-const handleError = (err, reply) => {
-  if (err instanceof ClientError) {
-    reply.code(400).send(createErrorReplyObj(400, err.message));
-    return;
-  }
-  console.error(err);
-  reply.code(500).send(createErrorReplyObj(500));
-};
-
 module.exports = {
-  handleError,
+  createErrorReplyObj,
+  AppError,
 };

@@ -1,8 +1,24 @@
-const { handleError } = require("./error-handler");
+const { EventEmitter } = require("events");
+const { createErrorReplyObj, AppError } = require("./error-handler");
 
-class Controller {
+class Controller extends EventEmitter {
   constructor(service) {
+    super();
     this.service = service;
+  }
+
+  _handleError(err, reply) {
+    if (err instanceof AppError) {
+      if (err.statusCode == 500) {
+        console.error(err);
+      }
+      reply
+        .code(err.statusCode)
+        .send(createErrorReplyObj(err.statusCode, err.message));
+      return;
+    }
+    reply.code(500).send(createErrorReplyObj(500));
+    this.emit("error", err);
   }
 
   async register(req, reply) {
@@ -11,7 +27,7 @@ class Controller {
       const token = await reply.jwtSign(user);
       reply.send({ token });
     } catch (err) {
-      handleError(err, reply);
+      this._handleError(err, reply);
     }
   }
 
@@ -21,7 +37,7 @@ class Controller {
       const token = await reply.jwtSign(user);
       reply.send({ token });
     } catch (err) {
-      handleError(err, reply);
+      this._handleError(err, reply);
     }
   }
 
@@ -30,7 +46,7 @@ class Controller {
       const id = await this.service.createClient(req.body);
       reply.send({ id });
     } catch (err) {
-      handleError(err, reply);
+      this._handleError(err, reply);
     }
   }
 
@@ -39,7 +55,7 @@ class Controller {
       const client = await this.service.findClientById(req.params.id);
       reply.send(client);
     } catch (err) {
-      handleError(err, reply);
+      this._handleError(err, reply);
     }
   }
 
@@ -48,7 +64,7 @@ class Controller {
       await this.service.updateClient(req.body);
       reply.send({ status: "Ok" });
     } catch (err) {
-      handleError(err, reply);
+      this._handleError(err, reply);
     }
   }
 
@@ -57,7 +73,7 @@ class Controller {
       await this.service.deleteClientById(req.params.id);
       reply.send({ status: "Ok" });
     } catch (err) {
-      handleError(err, reply);
+      this._handleError(err, reply);
     }
   }
 
@@ -66,7 +82,7 @@ class Controller {
       const clients = await this.service.findAllClients();
       reply.send(clients);
     } catch (err) {
-      handleError(err, reply);
+      this._handleError(err, reply);
     }
   }
 
@@ -75,7 +91,7 @@ class Controller {
       const id = await this.service.createAssistant(req.body);
       reply.send({ id });
     } catch (err) {
-      handleError(err, reply);
+      this._handleError(err, reply);
     }
   }
 
@@ -84,7 +100,7 @@ class Controller {
       const assistants = await this.service.findAllAssistants();
       reply.send(assistants);
     } catch (err) {
-      handleError(err, reply);
+      this._handleError(err, reply);
     }
   }
 }

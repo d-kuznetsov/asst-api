@@ -5,7 +5,7 @@ const {
   adaptId,
 } = require("../../repository/mongodb/base");
 
-const { ClientError } = require("../../error");
+const { AppError } = require("../../errors");
 
 const COLLECTION = "test-persons";
 
@@ -30,7 +30,7 @@ describe("MongoDB Base Repo", () => {
     try {
       checkId("wrong-id");
     } catch (err) {
-      expect(err instanceof ClientError).toEqual(true);
+      expect(err instanceof AppError).toEqual(true);
     }
   });
 
