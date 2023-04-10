@@ -1,15 +1,15 @@
 const Fastify = require("fastify");
-const fastifyMultipart = require("@fastify/multipart");
-const authPlugin = require("./auth");
-const swaggerPlugin = require("./swagger");
+const fstMultipart = require("@fastify/multipart");
+const auth = require("./auth");
+const swagger = require("./swagger");
 
 const createServer = (router, logger) => {
   const fastify = Fastify({ logger });
-  fastify.register(fastifyMultipart, {
+  fastify.register(fstMultipart, {
     attachFieldsToBody: "keyValues",
   });
-  fastify.register(authPlugin);
-  fastify.register(swaggerPlugin);
+  fastify.register(auth);
+  fastify.register(swagger);
   fastify.register(router);
 
   return fastify;
