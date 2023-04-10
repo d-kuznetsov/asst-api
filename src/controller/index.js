@@ -46,7 +46,7 @@ class Controller extends EventEmitter {
 
   async createClient(req, reply) {
     try {
-      const id = await this.service.createClient(req.body);
+      const id = await this.service.createOne("clients", req.body);
       reply.send({ id });
     } catch (err) {
       this._handleError(err, reply);
@@ -55,7 +55,7 @@ class Controller extends EventEmitter {
 
   async findClientById(req, reply) {
     try {
-      const client = await this.service.findClientById(req.params.id);
+      const client = await this.service.findOneById("clients", req.params.id);
       reply.send(client);
     } catch (err) {
       this._handleError(err, reply);
@@ -64,7 +64,7 @@ class Controller extends EventEmitter {
 
   async updateClient(req, reply) {
     try {
-      await this.service.updateClient(req.body);
+      await this.service.updateOne("clients", req.body);
       reply.send({ status: "Ok" });
     } catch (err) {
       this._handleError(err, reply);
@@ -73,7 +73,7 @@ class Controller extends EventEmitter {
 
   async deleteClientById(req, reply) {
     try {
-      await this.service.deleteClientById(req.params.id);
+      await this.service.deleteOneById("clients", req.params.id);
       reply.send({ status: "Ok" });
     } catch (err) {
       this._handleError(err, reply);
@@ -82,7 +82,7 @@ class Controller extends EventEmitter {
 
   async findAllClients(_, reply) {
     try {
-      const clients = await this.service.findAllClients();
+      const clients = await this.service.findAll("clients");
       reply.send(clients);
     } catch (err) {
       this._handleError(err, reply);
