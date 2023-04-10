@@ -1,5 +1,5 @@
 const { EventEmitter } = require("events");
-const { createErrorReplyObj, AppError } = require("./error-handler");
+const { createErrorReplyObj, AppError } = require("./utils");
 
 class Controller extends EventEmitter {
   constructor(service, logger) {
