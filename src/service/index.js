@@ -1,8 +1,9 @@
 const { AppError } = require("../errors");
 
 class Service {
-  constructor(repository) {
+  constructor(repository, logger) {
     this.repository = repository;
+    this.logger = logger;
   }
 
   async register(params) {

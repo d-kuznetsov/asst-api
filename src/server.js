@@ -3,12 +3,8 @@ const fastifyMultipart = require("@fastify/multipart");
 const authPlugin = require("./auth");
 const swaggerPlugin = require("./swagger");
 
-const createServer = (router) => {
-  const fastify = Fastify({
-    logger: {
-      level: "warn",
-    },
-  });
+const createServer = (router, logger) => {
+  const fastify = Fastify({ logger });
   fastify.register(fastifyMultipart, {
     attachFieldsToBody: "keyValues",
   });

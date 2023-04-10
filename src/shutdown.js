@@ -1,20 +1,20 @@
 const TIMEOUT = 3000;
 
-function initShutdown(server, repository) {
+function initShutdown(server, repository, logger) {
   const createShutdownHandler = (code, reason) => {
     return async (value) => {
-      console.log(`\nServer closing by ${reason}`);
+      logger.info(`Server closing by ${reason}`);
       if (code) {
-        console.error(value);
+        logger.error(value);
       }
       setTimeout(() => {
-        console.warn(`Server failed to gracefully close before timeout`);
+        logger.warn(`Server failed to gracefully close before timeout`);
         process.exit(1);
       }, TIMEOUT).unref();
 
       await server.close();
       await repository.disconnect();
-      console.log("Server gracefully closed");
+      logger.info("Server gracefully closed");
       process.exit(code);
     };
   };

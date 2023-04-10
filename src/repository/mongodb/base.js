@@ -3,7 +3,8 @@ const { AppError } = require("../../errors");
 const { checkId, adaptId, handleMongoErr } = require("./utils");
 
 class MongoDbBase {
-  constructor(uri = "mongodb://localhost:27017/") {
+  constructor(logger, uri = "mongodb://localhost:27017/") {
+    this.logger = logger;
     this.client = new MongoClient(uri);
   }
 
@@ -123,6 +124,7 @@ class MongoDbBase {
     try {
       await this.client.connect();
       await this.client.db("assistants").command({ ping: 1 });
+      this.logger.info("Database connection open");
     } catch (err) {
       handleMongoErr(err);
     }
@@ -130,7 +132,7 @@ class MongoDbBase {
 
   async disconnect() {
     await this.client.close();
-    console.log("Database connection closed");
+    this.logger.info("Database connection closed");
   }
 }
 

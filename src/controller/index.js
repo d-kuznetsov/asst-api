@@ -2,15 +2,18 @@ const { EventEmitter } = require("events");
 const { createErrorReplyObj, AppError } = require("./error-handler");
 
 class Controller extends EventEmitter {
-  constructor(service) {
+  constructor(service, logger) {
     super();
     this.service = service;
+    this.logger = logger;
   }
 
   _handleError(err, reply) {
     if (err instanceof AppError) {
       if (err.statusCode == 500) {
-        console.error(err);
+        this.logger.error(err);
+      } else {
+        this.logger.warn(err);
       }
       reply
         .code(err.statusCode)
