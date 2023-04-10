@@ -12,7 +12,7 @@ const createRouter = (controller) => {
     Object.keys(protectedRoutes).forEach((key) => {
       fastify.route({
         ...protectedRoutes[key],
-        onRequest: [fastify.authenticate],
+        //onRequest: [fastify.authenticate],
         handler: controller[key].bind(controller),
       });
     });

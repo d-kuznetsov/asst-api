@@ -44,6 +44,42 @@ class Controller extends EventEmitter {
     }
   }
 
+  async findUserById(req, reply) {
+    try {
+      const user = await this.service.findOneById("users", req.params.id);
+      reply.send(user);
+    } catch (err) {
+      this._handleError(err, reply);
+    }
+  }
+
+  async updateUser(req, reply) {
+    try {
+      await this.service.updateOne("users", req.body);
+      reply.send({ status: "Ok" });
+    } catch (err) {
+      this._handleError(err, reply);
+    }
+  }
+
+  async deleteUserById(req, reply) {
+    try {
+      await this.service.deleteOneById("users", req.params.id);
+      reply.send({ status: "Ok" });
+    } catch (err) {
+      this._handleError(err, reply);
+    }
+  }
+
+  async findAllUsers(_, reply) {
+    try {
+      const users = await this.service.findAll("users");
+      reply.send(users);
+    } catch (err) {
+      this._handleError(err, reply);
+    }
+  }
+
   async createClient(req, reply) {
     try {
       const id = await this.service.createOne("clients", req.body);
@@ -91,8 +127,38 @@ class Controller extends EventEmitter {
 
   async createAssistant(req, reply) {
     try {
-      const id = await this.service.createAssistant(req.body);
+      const id = await this.service.createOne("assistants", req.body);
       reply.send({ id });
+    } catch (err) {
+      this._handleError(err, reply);
+    }
+  }
+
+  async findAssistantById(req, reply) {
+    try {
+      const assistant = await this.service.findOneById(
+        "assistants",
+        req.params.id
+      );
+      reply.send(assistant);
+    } catch (err) {
+      this._handleError(err, reply);
+    }
+  }
+
+  async updateAssistant(req, reply) {
+    try {
+      await this.service.updateOne("assistants", req.body);
+      reply.send({ status: "Ok" });
+    } catch (err) {
+      this._handleError(err, reply);
+    }
+  }
+
+  async deleteAssistantById(req, reply) {
+    try {
+      await this.service.deleteOneById("assistants", req.params.id);
+      reply.send({ status: "Ok" });
     } catch (err) {
       this._handleError(err, reply);
     }
@@ -100,7 +166,7 @@ class Controller extends EventEmitter {
 
   async findAllAssistants(_, reply) {
     try {
-      const assistants = await this.service.findAllAssistants();
+      const assistants = await this.service.findAll("assistants");
       reply.send(assistants);
     } catch (err) {
       this._handleError(err, reply);
