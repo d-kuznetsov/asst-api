@@ -31,6 +31,30 @@ class Service {
     return user;
   }
 
+  async createOne(collection, params) {
+    return this.repository.createOne(collection, params);
+  }
+
+  async findOneById(collection, id) {
+    const one = await this.repository.findOneById(collection, id);
+    if (!one) {
+      throw new AppError("Client is not found", 404);
+    }
+    return one;
+  }
+
+  async updateOne(collection, params) {
+    return this.repository.updateOne(collection, params);
+  }
+
+  async deleteOneById(collection, id) {
+    return this.repository.deleteClientById(collection, id);
+  }
+
+  async findAll(collection) {
+    return this.repository.findMany(collection, {});
+  }
+
   async createClient(params) {
     return this.repository.createClient(params);
   }
