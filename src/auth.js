@@ -5,7 +5,7 @@ module.exports = fastifyPlugin(async function (fastify) {
   fastify.register(fastifyJwt, {
     secret: process.env.JWT_SECRET_KEY,
     sign: {
-      expiresIn: "1h",
+      expiresIn: process.env.EXPIRES_IN,
     },
   });
 

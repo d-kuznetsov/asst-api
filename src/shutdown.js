@@ -1,6 +1,4 @@
-const TIMEOUT = 3000;
-
-function initShutdown(server, repository, logger) {
+const initShutdown = (server, repository, logger) => {
   const createShutdownHandler = (code, reason) => {
     return async (value) => {
       logger.info(`Server closing by ${reason}`);
@@ -10,7 +8,7 @@ function initShutdown(server, repository, logger) {
       setTimeout(() => {
         logger.warn(`Server failed to gracefully close before timeout`);
         process.exit(1);
-      }, TIMEOUT).unref();
+      }, process.env.CLOSE_TIMEOUT || 3000).unref();
 
       await server.close();
       await repository.disconnect();
@@ -32,7 +30,7 @@ function initShutdown(server, repository, logger) {
   process.on("SIGUSR2", createShutdownHandler(0, "SIGUSR2"));
 
   return createShutdownHandler;
-}
+};
 
 module.exports = {
   initShutdown,

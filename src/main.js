@@ -24,7 +24,7 @@ controller.on("error", handleError);
 const start = async () => {
   try {
     await repository.connect();
-    await server.listen({ port: 3000 });
+    await server.listen({ port: process.env.PORT || 3000 });
   } catch (err) {
     handleError(err);
   }

@@ -3,9 +3,9 @@ const { AppError } = require("../../errors");
 const { checkId, adaptId, handleMongoErr } = require("./utils");
 
 class MongoDbBase {
-  constructor(logger, uri = "mongodb://localhost:27017/") {
+  constructor(logger) {
     this.logger = logger;
-    this.client = new MongoClient(uri);
+    this.client = new MongoClient(process.env.MONGO_URL);
   }
 
   async _createOne(collection, document) {
