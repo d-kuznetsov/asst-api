@@ -7,11 +7,13 @@ class Service {
   }
 
   async register(params) {
-    const applicant = await this.repository.findUser({ email: params.email });
+    const applicant = await this.repository.findOne("users", {
+      email: params.email,
+    });
     if (applicant) {
       throw new AppError("User already exists", 400);
     }
-    const id = await this.repository.createUser(params);
+    const id = await this.repository.createOne("users", params);
     return {
       id,
       ...params,
@@ -21,7 +23,7 @@ class Service {
   async login(params) {
     const { email, password } = params;
     const authErr = new AppError("Email or/and password are not correct", 400);
-    const user = await this.repository.findUser({ email });
+    const user = await this.repository.findOne("users", { email });
     if (!user) {
       throw authErr;
     }
@@ -48,7 +50,7 @@ class Service {
   }
 
   async deleteOneById(collection, id) {
-    return this.repository.deleteClientById(collection, id);
+    return this.repository.deleteOneById(collection, id);
   }
 
   async findAll(collection) {
