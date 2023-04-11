@@ -12,7 +12,7 @@ class MongoDbBase {
     let result;
     try {
       result = await this.client
-        .db("assistanst")
+        .db(process.env.DATABASE)
         .collection(collection)
         .insertOne(document);
     } catch (err) {
@@ -30,7 +30,7 @@ class MongoDbBase {
 
     try {
       result = await this.client
-        .db("assistanst")
+        .db(process.env.DATABASE)
         .collection(collection)
         .findOne(internalQuery);
     } catch (err) {
@@ -57,7 +57,7 @@ class MongoDbBase {
     try {
       const { _id, ...updateParams } = internalQuery;
       result = await this.client
-        .db("assistanst")
+        .db(process.env.DATABASE)
         .collection(collection)
         .updateOne({ _id }, { $set: updateParams });
     } catch (err) {
@@ -80,7 +80,7 @@ class MongoDbBase {
 
     try {
       result = await this.client
-        .db("assistanst")
+        .db(process.env.DATABASE)
         .collection(collection)
         .deleteOne(internalQuery);
     } catch (err) {
@@ -101,7 +101,7 @@ class MongoDbBase {
     let result;
     try {
       result = await this.client
-        .db("assistanst")
+        .db(process.env.DATABASE)
         .collection(collection)
         .find(query)
         .toArray();
