@@ -18,9 +18,9 @@ class MongoDB extends MongoDbBase {
     return this._findOne(collection, { id });
   }
 
-  async updateOne(collection, params) {
-    checkId(params.id);
-    return this._updateOne(collection, params);
+  async updateOne(collection, id, params) {
+    checkId(id);
+    return this._updateOne(collection, { id, ...params });
   }
 
   async deleteOneById(collection, id) {

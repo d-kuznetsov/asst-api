@@ -45,8 +45,8 @@ class Service {
     return one;
   }
 
-  async updateOne(collection, params) {
-    return this.repository.updateOne(collection, params);
+  async updateOne(collection, id, params) {
+    return this.repository.updateOne(collection, id, params);
   }
 
   async deleteOneById(collection, id) {

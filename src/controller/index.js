@@ -193,7 +193,7 @@ class Controller extends EventEmitter {
 
   async updateOne(collection, req, reply) {
     try {
-      await this.service.updateOne(collection, req.body);
+      await this.service.updateOne(collection, req.params.id, req.body);
       reply.send({ status: "Ok" });
     } catch (err) {
       this._handleError(err, reply);
