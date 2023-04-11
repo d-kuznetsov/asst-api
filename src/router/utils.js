@@ -113,6 +113,61 @@ const makeFindAllRoute = (schema, controller) => {
   };
 };
 
+const makeRegisterRoute = (controller) => {
+  return {
+    method: "POST",
+    url: "/register",
+    schema: {
+      body: {
+        type: "object",
+        properties: {
+          name: { type: "string" },
+          email: { type: "string" },
+          password: { type: "string" },
+        },
+        required: ["name", "email", "password"],
+        additionalProperties: false,
+      },
+      response: {
+        200: {
+          type: "object",
+          properties: {
+            token: { type: "string" },
+          },
+        },
+      },
+    },
+    handler: controller["register"].bind(controller),
+  };
+};
+
+const makeLoginRoute = (controller) => {
+  return {
+    method: "POST",
+    url: "/login",
+    schema: {
+      body: {
+        type: "object",
+        properties: {
+          email: { type: "string" },
+          password: { type: "string" },
+        },
+        required: ["email", "password"],
+        additionalProperties: false,
+      },
+      response: {
+        200: {
+          type: "object",
+          properties: {
+            token: { type: "string" },
+          },
+        },
+      },
+    },
+    handler: controller["login"].bind(controller),
+  };
+};
+
 const buildRoutes = (schema, controller) => {
   const routes = [
     makeCreateOneRoute(schema, controller),
@@ -124,6 +179,12 @@ const buildRoutes = (schema, controller) => {
   return routes;
 };
 
+const buildAuthRoutes = (controller) => {
+  const routes = [makeRegisterRoute(controller), makeLoginRoute(controller)];
+  return routes;
+};
+
 module.exports = {
   buildRoutes,
+  buildAuthRoutes,
 };

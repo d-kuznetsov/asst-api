@@ -1,29 +1,15 @@
-const authRoutes = require("./user");
-const clientRoutes = require("./client");
-const assistantRoutes = require("./assistant");
-
-const protectedRoutes = {
-  ...clientRoutes,
-  ...assistantRoutes,
-};
+const { buildRoutes, buildAuthRoutes } = require("./utils");
+const schemas = require("../schemas");
 
 const createRouter = (controller) => {
+  const routes = schemas.reduce((routes, schema) => {
+    return [...routes, ...buildRoutes(schema, controller)];
+  }, buildAuthRoutes(controller));
+
   return (fastify, _, done) => {
-    Object.keys(protectedRoutes).forEach((key) => {
-      fastify.route({
-        ...protectedRoutes[key],
-        //onRequest: [fastify.authenticate],
-        handler: controller[key].bind(controller),
-      });
+    routes.forEach((route) => {
+      fastify.route(route);
     });
-
-    Object.keys(authRoutes).forEach((key) => {
-      fastify.route({
-        ...authRoutes[key],
-        handler: controller[key].bind(controller),
-      });
-    });
-
     done();
   };
 };
