@@ -172,6 +172,51 @@ class Controller extends EventEmitter {
       this._handleError(err, reply);
     }
   }
+
+  async createOne(collection, req, reply) {
+    try {
+      const id = await this.service.createOne(collection, req.body);
+      reply.send({ id });
+    } catch (err) {
+      this._handleError(err, reply);
+    }
+  }
+
+  async findOneById(collection, req, reply) {
+    try {
+      const one = await this.service.findOneById(collection, req.params.id);
+      reply.send(one);
+    } catch (err) {
+      this._handleError(err, reply);
+    }
+  }
+
+  async updateOne(collection, req, reply) {
+    try {
+      await this.service.updateOne(collection, req.body);
+      reply.send({ status: "Ok" });
+    } catch (err) {
+      this._handleError(err, reply);
+    }
+  }
+
+  async deleteOneById(collection, req, reply) {
+    try {
+      await this.service.deleteOneById(collection, req.params.id);
+      reply.send({ status: "Ok" });
+    } catch (err) {
+      this._handleError(err, reply);
+    }
+  }
+
+  async findAll(collection, _, reply) {
+    try {
+      const items = await this.service.findAll(collection);
+      reply.send(items);
+    } catch (err) {
+      this._handleError(err, reply);
+    }
+  }
 }
 
 module.exports = {
