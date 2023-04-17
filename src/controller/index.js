@@ -80,9 +80,9 @@ class Controller extends EventEmitter {
     }
   }
 
-  async findAll(collection, _, reply) {
+  async findMany(collection, req, reply) {
     try {
-      const items = await this.service.findAll(collection);
+      const items = await this.service.findMany(collection, {}, req.query);
       reply.send(items);
     } catch (err) {
       this._handleError(err, reply);

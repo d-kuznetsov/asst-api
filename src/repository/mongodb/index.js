@@ -28,8 +28,8 @@ class MongoDB extends MongoDbBase {
     await this._deleteOne(collection, { id });
   }
 
-  async findMany(collection, query) {
-    return this._findMany(collection, query);
+  async findMany(collection, filter, query) {
+    return this._findMany(collection, filter, query);
   }
 }
 

@@ -97,13 +97,16 @@ class MongoDbBase {
     }
   }
 
-  async _findMany(collection, query) {
+  async _findMany(collection, filter, query) {
     let result;
+    const { page = 1, limit = 20 } = query;
     try {
       result = await this.client
         .db(process.env.DATABASE)
         .collection(collection)
-        .find(query)
+        .find(filter)
+        .limit(limit * 1)
+        .skip((page - 1) * limit)
         .toArray();
     } catch (err) {
       handleMongoErr(

@@ -53,8 +53,8 @@ class Service {
     return this.repository.deleteOneById(collection, id);
   }
 
-  async findAll(collection) {
-    return this.repository.findMany(collection, {});
+  async findMany(collection, filter, query) {
+    return this.repository.findMany(collection, filter, query);
   }
 }
 

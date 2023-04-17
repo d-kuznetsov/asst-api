@@ -93,12 +93,16 @@ const makeDeleteOneRoute = (schema, controller) => {
   };
 };
 
-const makeFindAllRoute = (schema, controller) => {
+const makeFindManyRoute = (schema, controller) => {
   const collection = schema.title.toLowerCase();
   return {
     method: "GET",
     url: `/${collection}`,
     schema: {
+      querystring: {
+        page: { type: "integer", minimum: 1 },
+        limit: { type: "integer", minimum: 1 },
+      },
       response: {
         200: {
           type: "array",
@@ -109,7 +113,7 @@ const makeFindAllRoute = (schema, controller) => {
         },
       },
     },
-    handler: controller["findAll"].bind(controller, collection),
+    handler: controller["findMany"].bind(controller, collection),
   };
 };
 
@@ -174,7 +178,7 @@ const buildRoutes = (schema, controller) => {
     makeFindOneRoute(schema, controller),
     makeUpdateOneRoute(schema, controller),
     makeDeleteOneRoute(schema, controller),
-    makeFindAllRoute(schema, controller),
+    makeFindManyRoute(schema, controller),
   ];
   return routes;
 };
