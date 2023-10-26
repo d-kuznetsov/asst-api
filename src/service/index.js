@@ -13,6 +13,7 @@ class Service {
     if (applicant) {
       throw new AppError("User already exists", 400);
     }
+    // add password hashing
     const id = await this.repository.createOne("users", params);
     return {
       id,
